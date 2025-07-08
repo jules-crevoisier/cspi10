@@ -117,4 +117,21 @@ class Actualite extends BaseModel
             throw $e;
         }
     }
+
+    /** Récupérer toutes les catégories utilisées */
+    public static function getCategories(): array
+    {
+        try {
+            error_log("Récupération des catégories d'actualités");
+            
+            $stmt = self::$db->query("SELECT DISTINCT categorie FROM " . self::TABLE . " WHERE categorie IS NOT NULL AND categorie != '' ORDER BY categorie");
+            $categories = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+            
+            error_log("Catégories trouvées: " . implode(', ', $categories));
+            return $categories;
+        } catch (\Exception $e) {
+            error_log("Erreur dans Actualite::getCategories: " . $e->getMessage());
+            throw $e;
+        }
+    }
 }

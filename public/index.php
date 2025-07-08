@@ -29,7 +29,7 @@ switch ($uri) {
     case '/actualites':
         // Initialiser les variables pour la page actualités
         $actualites = \App\Models\Actualite::getAll();
-        $categories = array_unique(array_column($actualites, 'categorie'));
+        $categories = \App\Models\Actualite::getCategories();
         require __DIR__ . '/view/actualites.php';
         break;
 

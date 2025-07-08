@@ -19,6 +19,9 @@ if (!$actualite) {
 
 // Récupérer les images de l'actualité
 $images = ActualiteImage::listByActualite($id);
+
+// Analyser les images pour adapter le carousel
+$carouselConfig = analyzeImagesForCarousel($images);
 ?>
 <?php include __DIR__ . '/../include/header.php'; ?>
 
@@ -36,11 +39,11 @@ $images = ActualiteImage::listByActualite($id);
         <section class="news-detail">
             <div class="container">
                 <?php if (!empty($images)): ?>
-                    <div class="swiper">
+                    <div class="swiper <?= $carouselConfig['class'] ?>" data-type="<?= $carouselConfig['type'] ?>">
                         <div class="swiper-wrapper">
                             <?php foreach ($images as $image): ?>
                                 <div class="swiper-slide">
-                                    <img src="/<?=htmlspecialchars($image['url']) ?>" alt="<?= htmlspecialchars($actualite['titre']) ?>">
+                                    <img src="/<?=htmlspecialchars($image['url']) ?>" alt="<?= htmlspecialchars($actualite['titre']) ?>" loading="lazy">
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -94,16 +97,47 @@ $images = ActualiteImage::listByActualite($id);
     padding: 40px 0;
 }
 
+/* Carousel par défaut - Images photos classiques */
 .swiper {
     width: 100%;
     height: 500px;
     margin-bottom: 30px;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
 }
 
+/* Carousel pour images de documents en portrait (PDF A4, etc.) */
+.swiper.swiper-document-portrait {
+    height: 700px;
+    max-width: 600px;
+    margin: 0 auto 30px auto;
+}
+
+/* Carousel pour images de documents en paysage (PowerPoint, etc.) */
+.swiper.swiper-document-landscape {
+    height: 600px;
+    max-width: 900px;
+    margin: 0 auto 30px auto;
+}
+
+/* Carousel pour photos classiques */
+.swiper.swiper-photo {
+    height: 500px;
+}
+
+/* Images dans le carousel */
 .swiper-slide img {
     width: 100%;
     height: 100%;
+    object-fit: contain; /* Changé de 'cover' à 'contain' pour préserver les proportions des documents */
+    background: #f8f9fa; /* Fond clair pour les documents */
+}
+
+/* Pour les photos, utiliser object-fit: cover */
+.swiper.swiper-photo .swiper-slide img {
     object-fit: cover;
+    background: transparent;
 }
 
 .news-content {
@@ -151,16 +185,17 @@ $images = ActualiteImage::listByActualite($id);
 .swiper-button-next,
 .swiper-button-prev {
     color: #fff;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.5);
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
 }
 
 .swiper-button-next:hover,
 .swiper-button-prev:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.7);
+    transform: scale(1.1);
 }
 
 .swiper-button-next::after,
@@ -169,13 +204,65 @@ $images = ActualiteImage::listByActualite($id);
 }
 
 .swiper-pagination-bullet {
-    background: #fff;
-    opacity: 0.7;
+    background: rgba(255, 255, 255, 0.7);
+    opacity: 1;
+    transition: all 0.3s ease;
 }
 
 .swiper-pagination-bullet-active {
     background: #007bff;
-    opacity: 1;
+    transform: scale(1.2);
+}
+
+/* Responsive pour les différents types de carousel */
+@media (max-width: 992px) {
+    .swiper.swiper-document-portrait {
+        height: 600px;
+        max-width: 500px;
+    }
+    
+    .swiper.swiper-document-landscape {
+        height: 500px;
+        max-width: 800px;
+    }
+}
+
+@media (max-width: 768px) {
+    .swiper,
+    .swiper.swiper-document-portrait,
+    .swiper.swiper-document-landscape,
+    .swiper.swiper-photo {
+        height: 400px;
+        max-width: 100%;
+    }
+    
+    .swiper.swiper-document-portrait {
+        height: 500px;
+    }
+}
+
+@media (max-width: 576px) {
+    .swiper,
+    .swiper.swiper-document-portrait,
+    .swiper.swiper-document-landscape,
+    .swiper.swiper-photo {
+        height: 300px;
+    }
+    
+    .swiper.swiper-document-portrait {
+        height: 400px;
+    }
+    
+    .swiper-button-next,
+    .swiper-button-prev {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .swiper-button-next::after,
+    .swiper-button-prev::after {
+        font-size: 16px;
+    }
 }
 </style> 
 </html> 

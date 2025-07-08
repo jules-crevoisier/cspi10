@@ -11,7 +11,7 @@ class ActualiteController
     {
         // Récupération BDD
         $actualites = Actualite::getAll(); // ← méthode correcte
-        $categories = ['juridique', 'formation', 'evenement'];
+        $categories = Actualite::getCategories(); // Récupération dynamique des catégories
 
         include_once __DIR__ . '/../../public/view/actualites.php';
     }

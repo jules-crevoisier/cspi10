@@ -225,4 +225,46 @@ public/uploads/
 - [x] Correction du chemin du script dans `footer.php` (`/asset/js/main.js`)
 - [x] Ajout de fonctionnalités bonus : animations, smooth scroll, filtres
 - [x] Gestion responsive du menu burger avec animations CSS
-- [x] Fermeture automatique du menu mobile (clic extérieur, redimensionnement) 
+- [x] Fermeture automatique du menu mobile (clic extérieur, redimensionnement)
+
+### 2025-01-31 - Adaptation du carousel des actualités
+
+#### ✅ Adaptation automatique de la taille du carousel
+- [x] Détection automatique des images issues de conversion PDF/PowerPoint
+- [x] Adaptation de la hauteur du carousel selon le type d'images
+- [x] Maintien de la taille par défaut pour les images normales
+- [x] CSS responsive pour gérer les différents formats d'images
+- [x] Optimisation de l'affichage pour les images au format document (portrait/paysage)
+
+**Objectif** : Le carousel doit s'adapter automatiquement à la taille des images convertées depuis des PDF et PowerPoint tout en gardant une présentation optimale pour les photos classiques.
+
+#### ✅ Fonctionnalités implémentées
+- [x] Fonction `analyzeImagesForCarousel()` dans `app/config/helpers.php`
+- [x] Détection intelligente basée sur les dimensions et ratios d'aspect
+- [x] Trois types de carousel : `swiper-photo` (500px), `swiper-document-landscape` (600px), `swiper-document-portrait` (700px)
+- [x] CSS adaptatif avec `object-fit: contain` pour les documents et `object-fit: cover` pour les photos
+- [x] Design responsive pour mobile avec ajustement automatique des tailles
+- [x] Amélioration de l'UX avec bordures arrondies, ombres et transitions fluides
+- [x] **Intégration dans l'interface d'administration** : Carousel adaptatif dans le formulaire de modification des actualités
+- [x] **Correction des filtres** : Récupération dynamique des catégories depuis la base de données
+
+#### ✅ Corrections et améliorations supplémentaires
+- [x] Ajout de la méthode `getCategories()` dans le modèle `Actualite`
+- [x] Modification du contrôleur pour utiliser les catégories dynamiques
+- [x] Correction du système de filtrage dans la vue `actualites.php`
+- [x] Interface d'administration améliorée avec aperçu carousel et contrôles séparés
+- [x] Badge d'identification de l'image principale dans le carousel admin
+- [x] Styles adaptatifs pour l'interface d'administration (Bootstrap + Swiper)
+
+#### ✅ Correction complète des filtres (31/01/2025)
+- [x] **Résolution du problème d'animation** : Cartes qui disparaissaient après 1 seconde
+- [x] **Simplification du système de filtrage** : Manipulation directe des styles CSS au lieu d'animations complexes
+- [x] **Gestion intelligente de la pagination** : Masquée lors du filtrage, rétablie pour "Toutes les actualités"
+- [x] **Affichage de toutes les actualités** : Filtrage sur l'ensemble des données, pas seulement la page courante
+- [x] **Élimination des timeouts et classes complexes** : Solution simple et fiable
+- [x] **Attributs data-on-page** : Gestion correcte de la pagination via JavaScript
+- [x] **Correction finale du problème de clic** : Filtrage qui fonctionne maintenant parfaitement
+
+## 🚧 Tâches en cours
+
+*Aucune tâche en cours actuellement* 
