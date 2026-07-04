@@ -30,6 +30,9 @@ Guide pas à pas pour déployer le site CSPI10 sur [Dockploy](https://dockploy.c
 
 Copier depuis `.env.example` et renseigner :
 
+> **HTTPS** : `APP_URL` et `SITE_URL` doivent commencer par `https://` en production.
+> Dans Dockploy, activez HTTPS + Let's Encrypt sur le domaine (Container Port **8080**).
+
 ```env
 APP_ENV=production
 APP_DEBUG=false

@@ -22,7 +22,7 @@ final class Security
         session_set_cookie_params([
             'lifetime' => 0,
             'path' => '/',
-            'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+            'secure' => Request::isSecure(),
             'httponly' => true,
             'samesite' => 'Lax',
         ]);
@@ -114,7 +114,7 @@ final class Security
         header('X-Content-Type-Options: nosniff');
         header('Referrer-Policy: strict-origin-when-cross-origin');
         header('Permissions-Policy: geolocation=(), microphone=(), camera=()');
-        if (Env::isProduction()) {
+        if (Env::isProduction() && Request::isSecure()) {
             header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
         }
     }
