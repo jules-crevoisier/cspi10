@@ -112,7 +112,6 @@
             })
             .then(response => response.json())
             .then(data => {
-                // Afficher le message de réponse
                 showAlert(data.success ? 'success' : 'error', data.message);
                 
                 if (data.success) {

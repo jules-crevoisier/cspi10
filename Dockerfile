@@ -25,9 +25,9 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html/public \
     APP_PORT=8080
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libsqlite3-dev \
-    && docker-php-ext-install pdo_sqlite \
-    && apt-get purge -y --auto-remove libsqlite3-dev \
+    && apt-get install -y --no-install-recommends libsqlite3-dev libcurl4-openssl-dev \
+    && docker-php-ext-install pdo_sqlite curl \
+    && apt-get purge -y --auto-remove libsqlite3-dev libcurl4-openssl-dev \
     && a2enmod rewrite headers \
     && sed -i "s/Listen 80/Listen ${APP_PORT}/" /etc/apache2/ports.conf \
     && sed -ri 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \

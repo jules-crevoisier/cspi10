@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Core\HttpClient;
+
 /**
  * Formulaire de contact — envoi via l'API Resend (clé dans .env uniquement).
  */
@@ -93,25 +95,27 @@ class ContactController
             'reply_to' => $email,
         ];
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'https://api.resend.com/emails');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $this->resendApiKey,
-            'Content-Type: application/json',
-        ]);
+        $result = HttpClient::postJson(
+            'https://api.resend.com/emails',
+            $data,
+            [
+                'Authorization' => 'Bearer ' . $this->resendApiKey,
+                'Content-Type' => 'application/json',
+            ]
+        );
 
-        curl_exec($ch);
-        $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        if ($httpCode !== 200) {
-            error_log('[Contact] Resend HTTP ' . $httpCode);
+        if ($result['http_code'] !== 200) {
+            $log = '[Contact] Resend HTTP ' . $result['http_code'];
+            if ($result['error'] !== '') {
+                $log .= ' | curl: ' . $result['error'];
+            }
+            if ($result['body'] !== '') {
+                $log .= ' | ' . $result['body'];
+            }
+            error_log($log);
         }
 
-        return $httpCode === 200;
+        return $result['http_code'] === 200;
     }
 
     private function buildEmailTemplate(string $name, string $email, string $subject, string $message): string
@@ -170,8 +174,8 @@ class ContactController
      */
     private function jsonResponse(array $data): void
     {
-        header('Content-Type: application/json');
-        echo json_encode($data);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($data, JSON_UNESCAPED_UNICODE);
         exit;
     }
 }

@@ -4,9 +4,10 @@
     "type": "project",
     "require": {
         "php": ">=8.2",
-        "vlucas/phpdotenv": "^5.6",
+        "composer/ca-bundle": "^1.5",
+        "darkterminal/turso-client-http": "^2.9",
         "ezyang/htmlpurifier": "^4.19",
-        "darkterminal/turso-client-http": "^2.9"
+        "vlucas/phpdotenv": "^5.6"
     },
     "autoload": {
         "psr-4": {
