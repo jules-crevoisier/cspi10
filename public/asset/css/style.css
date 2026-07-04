@@ -2599,3 +2599,123 @@ img {
         grid-template-columns: 1fr;
     }
 }
+
+/* Espace adhérent — outils pratiques */
+.adherent-hero {
+    margin-top: 0;
+}
+
+.adherent-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    justify-content: center;
+    margin-top: var(--spacing-md);
+}
+
+.adherent-hero-actions .btn-logout {
+    background: #dc3545;
+    color: var(--white);
+}
+
+.adherent-hero-actions .btn-logout:hover {
+    background: #c82333;
+    color: var(--white);
+}
+
+.adherent-panel {
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-lg);
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+    align-items: stretch;
+}
+
+.tool-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: var(--spacing-lg);
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    background: var(--white);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tool-card:hover {
+    border-color: var(--secondary-color);
+    box-shadow: var(--shadow-md);
+}
+
+.tool-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.tool-card-icon {
+    flex-shrink: 0;
+    width: 2.5rem;
+    font-size: 2rem;
+    line-height: 1;
+    text-align: center;
+}
+
+.tool-card-title {
+    margin: 0 0 0.25rem;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+.tool-card-subtitle {
+    display: block;
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+.tool-card-desc {
+    flex: 1;
+    margin: 0 0 var(--spacing-md);
+    color: #555;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.tool-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid #eee;
+    color: var(--secondary-color);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.tool-card-link:hover {
+    color: var(--primary-color);
+}
+
+@media (max-width: 992px) {
+    .tools-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .tools-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .adherent-panel {
+        padding: var(--spacing-lg);
+    }
+}
