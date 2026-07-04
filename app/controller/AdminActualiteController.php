@@ -23,7 +23,6 @@ class AdminActualiteController extends AdminController
     public function index()
     {
         error_log("Appel de AdminActualiteController::index()");
-        Actualite::init(DB_HOST, DB_NAME, DB_USER, DB_PASS);
         return Actualite::getAll();
     }
 
@@ -33,8 +32,6 @@ class AdminActualiteController extends AdminController
         error_log("Méthode de requête: " . $_SERVER['REQUEST_METHOD']);
         
         // Initialize DB connection
-        Actualite::init(DB_HOST, DB_NAME, DB_USER, DB_PASS);
-        
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             error_log("Traitement du formulaire POST pour créer une actualité");
             error_log("Contenu de \$_POST: " . print_r($_POST, true));
@@ -79,7 +76,6 @@ class AdminActualiteController extends AdminController
     {
         error_log("Début de la méthode edit() avec ID: " . $id);
         
-        Actualite::init(DB_HOST, DB_NAME, DB_USER, DB_PASS);
         $actualite = Actualite::getById($id);
         
         if (!$actualite) {
@@ -130,7 +126,6 @@ class AdminActualiteController extends AdminController
     {
         error_log("Début de la méthode delete() avec ID: " . $id);
         
-        Actualite::init(DB_HOST, DB_NAME, DB_USER, DB_PASS);
         $actualite = Actualite::getById($id);
 
         if (!$actualite) {

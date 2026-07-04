@@ -1,0 +1,20 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    env_file:
+      - .env
+    volumes:
+      - cspi_data:/var/www/html/database/data
+      - cspi_uploads:/var/www/html/public/uploads
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health.php"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  cspi_data:
+  cspi_uploads:

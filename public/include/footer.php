@@ -44,6 +44,6 @@
         </div>
     </footer>
 
-    <script src="/asset/js/main.js"></script>
+    <script src="<?= url('/asset/js/main.js') ?>"></script>
 </body>
 </html> 

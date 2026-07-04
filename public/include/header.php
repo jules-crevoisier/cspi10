@@ -44,7 +44,7 @@ if (preg_match('#^/(actualites?)#', $uri)) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="/asset/css/style.css">
+    <link rel="stylesheet" href="<?= url('/asset/css/style.css') ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     
@@ -56,17 +56,17 @@ if (preg_match('#^/(actualites?)#', $uri)) {
         <nav class="navbar" role="navigation" aria-label="Navigation principale">
             <div class="container nav-container">
                 <div class="logo">
-                    <a href="/public/" aria-label="Accueil CSPI10">
-                        <img src="/asset/img/logo.png" alt="Logo CSPI10 - Chambre Syndicale des Propriétaires Immobiliers de l'Aube" width="60" height="60">
+                    <a href="<?= url('/') ?>" aria-label="Accueil CSPI10">
+                        <img src="<?= url('/asset/img/logo.png') ?>" alt="Logo CSPI10 - Chambre Syndicale des Propriétaires Immobiliers de l'Aube" width="60" height="60">
                     </a>
                 </div>
                 <ul class="nav-links" role="menubar">
-                    <li role="none"><a href="/public/" role="menuitem" <?= ($current_page === 'home') ? 'aria-current="page"' : '' ?>>Accueil</a></li>
-                    <li role="none"><a href="/public/actualites" role="menuitem" <?= ($current_page === 'actualites') ? 'aria-current="page"' : '' ?>>Actualités</a></li>
-                    <li role="none"><a href="/public/adhesion" role="menuitem" <?= ($current_page === 'adhesion') ? 'aria-current="page"' : '' ?>>Adhésion</a></li>
-                    <li role="none"><a href="/public/biens" role="menuitem" <?= ($current_page === 'biens') ? 'aria-current="page"' : '' ?>>Nos biens</a></li>
-                    <li role="none"><a href="/public/partenaires" role="menuitem" <?= ($current_page === 'partenaires') ? 'aria-current="page"' : '' ?>>Partenaires</a></li>
-                    <li role="none"><a href="/public/contact" role="menuitem" <?= ($current_page === 'contact') ? 'aria-current="page"' : '' ?>>Contact</a></li>
+                    <li role="none"><a href="<?= url('/') ?>" role="menuitem" <?= ($current_page === 'home') ? 'aria-current="page"' : '' ?>>Accueil</a></li>
+                    <li role="none"><a href="<?= url('/actualites') ?>" role="menuitem" <?= ($current_page === 'actualites') ? 'aria-current="page"' : '' ?>>Actualités</a></li>
+                    <li role="none"><a href="<?= url('/adhesion') ?>" role="menuitem" <?= ($current_page === 'adhesion') ? 'aria-current="page"' : '' ?>>Adhésion</a></li>
+                    <li role="none"><a href="<?= url('/biens') ?>" role="menuitem" <?= ($current_page === 'biens') ? 'aria-current="page"' : '' ?>>Nos biens</a></li>
+                    <li role="none"><a href="<?= url('/partenaires') ?>" role="menuitem" <?= ($current_page === 'partenaires') ? 'aria-current="page"' : '' ?>>Partenaires</a></li>
+                    <li role="none"><a href="<?= url('/contact') ?>" role="menuitem" <?= ($current_page === 'contact') ? 'aria-current="page"' : '' ?>>Contact</a></li>
                 </ul>
                 <button class="burger" aria-label="Menu mobile" aria-expanded="false" aria-controls="nav-links">
                     <div class="line1"></div>

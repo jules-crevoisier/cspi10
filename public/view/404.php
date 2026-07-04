@@ -1,25 +1,12 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page non trouvée - UNPI</title>
-    <link rel="stylesheet" href="/assets/css/style.css">
-</head>
-<body>
-    <?php require __DIR__ . '/../includes/header.php'; ?>
+<?php include __DIR__ . '/../include/header.php'; ?>
 
-    <main class="container">
-        <div class="error-page">
-            <h1>404 - Page non trouvée</h1>
-            <p>Désolé, la page que vous recherchez n'existe pas ou a été déplacée.</p>
-            <div class="error-actions">
-                <a href="/" class="btn btn-primary">Retour à l'accueil</a>
-                <a href="/contact" class="btn btn-secondary">Nous contacter</a>
-            </div>
-        </div>
-    </main>
+<main class="container" style="padding: 4rem 1rem; text-align: center;">
+    <h1>Page introuvable</h1>
+    <p>Désolé, la page que vous recherchez n'existe pas ou a été déplacée.</p>
+    <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="<?= url('/') ?>" class="btn btn-primary">Retour à l'accueil</a>
+        <a href="<?= url('/contact') ?>" class="btn btn-secondary">Nous contacter</a>
+    </div>
+</main>
 
-    <?php require __DIR__ . '/../includes/footer.php'; ?>
-</body>
-</html> 
+<?php include __DIR__ . '/../include/footer.php'; ?>

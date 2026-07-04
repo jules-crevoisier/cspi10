@@ -1,15 +1,8 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-require_once __DIR__ . '/../../../app/config/autoload.php';
-require_once __DIR__ . '/../../../app/config/config.php';
-
 use App\Controller\AdminController;
 use App\Controller\AdminActualiteController;
 use App\Models\Actualite;
 
-// Vérification de l'authentification
 $adminController = new AdminController();
 $adminController->requireLogin();
 
@@ -17,7 +10,6 @@ $controller = new AdminActualiteController();
 $actualite = null;
 $isEdit = false;
 
-// Determine if we're in edit mode and get the actualite
 if (isset($_GET['id'])) {
     $isEdit = true;
     $id = (int)$_GET['id'];
@@ -316,7 +308,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <?php foreach ($actualite['images'] as $image): ?>
                                                 <div class="swiper-slide">
                                                     <div class="admin-slide-content">
-                                                        <img src="<?php echo $image['url']; ?>" alt="Image de l'actualité" loading="lazy">
+                                                        <img src="<?= mediaUrl($image['url']) ?>" alt="Image de l'actualité" loading="lazy">
                                                         <?php if ($image['is_primary']): ?>
                                                             <div class="primary-badge">
                                                                 <i class="bi bi-star-fill"></i> Image principale
@@ -340,7 +332,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <div class="card h-100">
                                                     <div class="card-body d-flex flex-column">
                                                         <div class="d-flex align-items-center mb-2">
-                                                            <img src="<?php echo $image['url']; ?>" class="rounded me-2" style="width: 50px; height: 50px; object-fit: cover;" alt="Miniature">
+                                                            <img src="<?= mediaUrl($image['url']) ?>" class="rounded me-2" style="width: 50px; height: 50px; object-fit: cover;" alt="Miniature">
                                                             <div class="flex-grow-1">
                                                                 <small class="text-muted">Image <?= $index + 1 ?></small>
                                                                 <?php if ($image['is_primary']): ?>

@@ -1,0 +1,10 @@
+.git
+.env
+database/data/
+public/uploads/
+vendor/
+node_modules/
+*.md
+*.log
+backup-cspi.sql
+uploads-backup.tar.gz

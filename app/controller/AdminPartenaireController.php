@@ -26,8 +26,6 @@ class AdminPartenaireController extends AdminController
         error_log("Vérification de la méthode getAll: " . (method_exists(Partenaire::class, 'getAll') ? "existe" : "n'existe pas"));
         
         // Make sure the database connection is initialized
-        Partenaire::init(DB_HOST, DB_NAME, DB_USER, DB_PASS);
-        
         return Partenaire::getAll();
     }
 
@@ -37,8 +35,6 @@ class AdminPartenaireController extends AdminController
         error_log("Méthode de requête: " . $_SERVER['REQUEST_METHOD']);
         
         // Initialize DB connection
-        Partenaire::init(DB_HOST, DB_NAME, DB_USER, DB_PASS);
-        
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             error_log("Traitement du formulaire POST pour créer un partenaire");
             error_log("Contenu de \$_FILES: " . print_r($_FILES, true));
@@ -74,7 +70,6 @@ class AdminPartenaireController extends AdminController
     {
         error_log("Début de la méthode edit() avec ID: " . $id);
         
-        Partenaire::init(DB_HOST, DB_NAME, DB_USER, DB_PASS);
         $partenaire = Partenaire::getById($id);
         
         if (!$partenaire) {
@@ -130,7 +125,6 @@ class AdminPartenaireController extends AdminController
 
     public function delete($id)
     {
-        Partenaire::init(DB_HOST, DB_NAME, DB_USER, DB_PASS);
         $partenaire = Partenaire::getById($id);
 
         if (!$partenaire) {

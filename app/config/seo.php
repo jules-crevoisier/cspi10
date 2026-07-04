@@ -8,7 +8,9 @@
 // Informations générales du site
 define('SITE_NAME', 'CSPI10 - Chambre Syndicale des Propriétaires Immobiliers de l\'Aube');
 define('SITE_DESCRIPTION', 'Chambre Syndicale des Propriétaires Immobiliers de l\'Aube (CSPI10). Défense, conseil et accompagnement des propriétaires immobiliers dans l\'Aube depuis 1895.');
-define('SITE_URL', 'https://www.cspi10.fr');
+if (!defined('SITE_URL')) {
+    define('SITE_URL', APP_URL);
+}
 define('SITE_KEYWORDS', 'propriétaires immobiliers, Aube, Troyes, chambre syndicale, CSPI10, gestion locative, conseil immobilier, défense propriétaires, fiscalité immobilière, copropriété');
 
 // Configuration SEO - maintenant intégrée dans les fonctions pour éviter les problèmes de portée

@@ -1,78 +1,86 @@
-/* CSS pour l'administration */
+/* Administration CSPI10 — styles partagés */
 
-/* Sidebar */
-.sidebar {
+.admin-body {
+    background: #f4f6f9;
     min-height: 100vh;
-    background-color: #343a40;
-    color: white;
 }
 
-.sidebar .nav-link {
-    color: rgba(255,255,255,.75);
+.admin-sidebar {
+    background: #2c3e50;
+    min-height: 100vh;
+    color: #fff;
 }
 
-.sidebar .nav-link:hover {
-    color: rgba(255,255,255,1);
+.admin-nav .nav-link {
+    color: rgba(255, 255, 255, 0.75);
+    border-radius: 6px;
+    margin-bottom: 4px;
+    padding: 0.6rem 0.75rem;
 }
 
-.sidebar .nav-link.active {
-    color: white;
-    background-color: rgba(255,255,255,.1);
+.admin-nav .nav-link:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
 }
 
-.main-content {
-    padding: 20px;
+.admin-nav .nav-link.active {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.15);
+    font-weight: 600;
 }
 
-/* Form sections */
-.form-section {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
+.admin-main {
+    padding: 1.5rem 2rem;
 }
 
-.form-section h4 {
-    color: #343a40;
-    margin-bottom: 15px;
-}
-
-/* Image handling */
-.image-preview {
-    max-width: 200px;
-    max-height: 200px;
-    margin: 10px;
-}
-
-.image-container {
-    position: relative;
-    display: inline-block;
-    margin: 10px;
-}
-
-.image-actions {
-    position: absolute;
-    top: 5px;
-    right: 5px;
+.admin-login-body {
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    min-height: 100vh;
     display: flex;
-    gap: 5px;
+    align-items: center;
 }
 
-/* Stat cards */
+.login-container {
+    max-width: 420px;
+    margin: 2rem auto;
+    width: 100%;
+}
+
 .stat-card {
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    position: relative;
 }
 
-/* CORRECTION CRITIQUE : Affichage des erreurs - éviter le rouge sur rouge */
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.stat-label {
+    opacity: 0.9;
+    margin-top: 0.5rem;
+}
+
+.stat-link {
+    display: inline-block;
+    margin-top: 0.75rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.875rem;
+    text-decoration: none;
+}
+
+.stat-link:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
 .alert-danger {
     background-color: #f8d7da !important;
     border-color: #f5c2c7 !important;
     color: #721c24 !important;
     border-left: 4px solid #dc3545;
-    font-weight: 500;
 }
 
 .alert-success {
@@ -80,7 +88,6 @@
     border-color: #badbcc !important;
     color: #0f5132 !important;
     border-left: 4px solid #198754;
-    font-weight: 500;
 }
 
 .alert-warning {
@@ -88,44 +95,15 @@
     border-color: #ffecb5 !important;
     color: #664d03 !important;
     border-left: 4px solid #ffc107;
-    font-weight: 500;
 }
 
-.alert-info {
-    background-color: #d1ecf1 !important;
-    border-color: #b8daff !important;
-    color: #055160 !important;
-    border-left: 4px solid #17a2b8;
-    font-weight: 500;
+.form-help {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
 }
 
-/* Améliorations visuelles */
-.alert {
-    border-radius: 8px;
-    padding: 15px 20px;
-    margin-bottom: 20px;
+.required-label::after {
+    content: ' *';
+    color: #dc3545;
 }
-
-.alert h5 {
-    margin-bottom: 10px;
-    font-weight: 600;
-}
-
-.alert p:last-child {
-    margin-bottom: 0;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .main-content {
-        padding: 10px;
-    }
-    
-    .form-section {
-        padding: 15px;
-    }
-    
-    .sidebar {
-        min-height: auto;
-    }
-} 

@@ -1,16 +1,10 @@
 <?php
-session_start();
-require_once __DIR__ . '/../../../app/config/autoload.php';
-require_once __DIR__ . '/../../../app/config/config.php';
-
 use App\Controller\AdminController;
 use App\Controller\AdminBienController;
 
-// Vérification de l'authentification
 $adminController = new AdminController();
 $adminController->requireLogin();
 
-error_log("Début de l'affichage de la liste des biens");
 $controller = new AdminBienController();
 $controller->index();
 

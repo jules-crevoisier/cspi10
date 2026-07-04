@@ -303,8 +303,6 @@ class AdminBienController
             error_log("Début de la méthode view() pour le bien ID: " . $id);
             
             // Initialiser la connexion à la base de données
-            Bien::init(DB_HOST, DB_NAME, DB_USER, DB_PASS);
-            
             // Récupérer le bien
             $bien = Bien::getById($id);
             error_log("Bien récupéré: " . print_r($bien, true));

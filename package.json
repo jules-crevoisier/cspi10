@@ -1,0 +1,17 @@
+{
+  "name": "cspi10-website",
+  "private": true,
+  "description": "Tests E2E Playwright pour le site CSPI10",
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:report": "playwright show-report",
+    "test:e2e:install": "playwright install chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.51.0",
+    "@types/node": "^22.13.0",
+    "typescript": "^5.8.0"
+  }
+}

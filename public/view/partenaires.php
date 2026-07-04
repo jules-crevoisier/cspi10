@@ -1,13 +1,6 @@
 <?php
-require_once __DIR__ . '/../../app/config/autoload.php';
-require_once __DIR__ . '/../../app/config/config.php';
-
 use App\Models\Partenaire;
 
-// Initialize the database connection
-Partenaire::init(DB_HOST, DB_NAME, DB_USER, DB_PASS);
-
-// Récupérer tous les partenaires
 $partenaires = Partenaire::getAll();
 ?>
 <?php include __DIR__ . '/../include/header.php'; ?>

@@ -1,22 +1,28 @@
 <?php
-session_start();
+require_once __DIR__ . '/../app/bootstrap.php';
 
-// Configuration
-define('ESPACE_ADHERENT_PASSWORD', 'adherent2025');
+use App\Core\Security;
 
-// Traitement du formulaire
+Security::startSession();
+
+$adherentPassword = ESPACE_ADHERENT_PASSWORD;
+if ($adherentPassword === '') {
+    http_response_code(503);
+    exit('Espace adhérent non configuré. Contactez l\'administrateur.');
+}
+
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
-    
-    if ($password === ESPACE_ADHERENT_PASSWORD) {
+
+    if ($password === $adherentPassword) {
+        Security::regenerateSession();
         $_SESSION['adherent_logged_in'] = true;
         $_SESSION['adherent_login_time'] = time();
         header('Location: espace-adherent.php');
         exit;
-    } else {
-        $message = 'Mot de passe incorrect';
     }
+    $message = 'Mot de passe incorrect. Vérifiez votre saisie ou contactez la CSPI10.';
 }
 ?>
 <!DOCTYPE html>

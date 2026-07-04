@@ -52,7 +52,7 @@ $slug = fn(string $s) => strtolower(trim($s));
                         <div class="news-image">
                             <?php
                             $img = ActualiteImage::getPrimaryImage($actu['id']);
-                            $url = $img ? '/'.$img['url'] : 'https://picsum.photos/800/600?random='.$actu['id'];
+                            $url = $img ? mediaUrl($img['url']) : 'https://picsum.photos/800/600?random='.$actu['id'];
                             ?>
                             <img src="<?= $url ?>" alt="<?= htmlspecialchars($actu['titre']) ?>" loading="lazy">
                         </div>

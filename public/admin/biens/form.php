@@ -1,15 +1,8 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-require_once __DIR__ . '/../../../app/config/autoload.php';
-require_once __DIR__ . '/../../../app/config/config.php';
-
 use App\Controller\AdminController;
 use App\Models\Bien;
 use App\Models\BienImage;
 
-// Vérification de l'authentification
 $adminController = new AdminController();
 $adminController->requireLogin();
 
@@ -18,9 +11,6 @@ $isEdit = false;
 $error = null;
 $images = [];
 
-// Initialize the database connection
-Bien::init(DB_HOST, DB_NAME, DB_USER, DB_PASS);
-
 // Determine if we're in edit mode and get the bien
 if (isset($_GET['id'])) {
     $isEdit = true;
@@ -28,7 +18,7 @@ if (isset($_GET['id'])) {
     $bien = Bien::getById($id);
     
     if (!$bien) {
-        header('Location: /public/admin/biens');
+        header('Location: /admin/biens');
         exit;
     }
 
@@ -82,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        header('Location: /public/admin/biens/detail?id=' . $bienId);
+        header('Location: /admin/biens/detail?id=' . $bienId);
         exit;
     } catch (Exception $e) {
         $error = "Une erreur est survenue : " . $e->getMessage();

@@ -1,15 +1,8 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-require_once __DIR__ . '/../../../app/config/autoload.php';
-require_once __DIR__ . '/../../../app/config/config.php';
-
 use App\Controller\AdminController;
 use App\Controller\AdminPartenaireController;
 use App\Models\Partenaire;
 
-// Vérification de l'authentification
 $adminController = new AdminController();
 $adminController->requireLogin();
 
@@ -18,10 +11,6 @@ $partenaire = null;
 $isEdit = false;
 $error = null;
 
-// Initialize the database connection
-Partenaire::init(DB_HOST, DB_NAME, DB_USER, DB_PASS);
-
-// Determine if we're in edit mode and get the partenaire
 if (isset($_GET['id'])) {
     $isEdit = true;
     $id = (int)$_GET['id'];

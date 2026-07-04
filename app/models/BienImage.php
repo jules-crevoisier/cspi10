@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace App\Models;
 
 class BienImage extends BaseModel
@@ -9,18 +11,15 @@ class BienImage extends BaseModel
     {
         return self::insert(self::TABLE, [
             'bien_id' => $bienId,
-            'url'     => $url,
+            'url' => $url,
             'is_primary' => $isPrimary ? 1 : 0,
-            'position'   => $position,
+            'position' => $position,
         ]);
     }
 
     public static function setPrimary(int $bienId, int $imageId): void
     {
-        self::$db->prepare(
-            "UPDATE " . self::TABLE . " SET is_primary = 0 WHERE bien_id = ?"
-        )->execute([$bienId]);
-
+        self::run('UPDATE ' . self::TABLE . ' SET is_primary = 0 WHERE bien_id = ?', [$bienId]);
         self::updateRow(self::TABLE, $imageId, ['is_primary' => 1]);
     }
 
@@ -29,26 +28,27 @@ class BienImage extends BaseModel
         return self::deleteRow(self::TABLE, $id);
     }
 
+    /** @return array<int, array<string, mixed>> */
     public static function listByBien(int $bienId): array
     {
-        $stmt = self::$db->prepare("SELECT * FROM " . self::TABLE . " WHERE bien_id = ? ORDER BY position");
-        $stmt->execute([$bienId]);
-        return $stmt->fetchAll();
+        return self::fetchAll(
+            'SELECT * FROM ' . self::TABLE . ' WHERE bien_id = ? ORDER BY position',
+            [$bienId]
+        );
     }
 
+    /** @return array<string, mixed>|null */
     public static function getPrimaryImage(int $bienId): ?array
     {
-        $stmt = self::$db->prepare("SELECT * FROM " . self::TABLE . " WHERE bien_id = ? AND is_primary = 1 LIMIT 1");
-        $stmt->execute([$bienId]);
-        $result = $stmt->fetch();
-        return $result ?: null;
+        return self::fetchOne(
+            'SELECT * FROM ' . self::TABLE . ' WHERE bien_id = ? AND is_primary = 1 LIMIT 1',
+            [$bienId]
+        );
     }
 
+    /** @return array<string, mixed>|null */
     public static function getById(int $id): ?array
     {
-        $stmt = self::$db->prepare("SELECT * FROM " . self::TABLE . " WHERE id = ? LIMIT 1");
-        $stmt->execute([$id]);
-        $result = $stmt->fetch();
-        return $result ?: null;
+        return self::fetchOne('SELECT * FROM ' . self::TABLE . ' WHERE id = ? LIMIT 1', [$id]);
     }
 }

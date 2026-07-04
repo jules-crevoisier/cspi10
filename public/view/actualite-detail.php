@@ -43,7 +43,7 @@ $carouselConfig = analyzeImagesForCarousel($images);
                         <div class="swiper-wrapper">
                             <?php foreach ($images as $image): ?>
                                 <div class="swiper-slide">
-                                    <img src="/<?=htmlspecialchars($image['url']) ?>" alt="<?= htmlspecialchars($actualite['titre']) ?>" loading="lazy">
+                                    <img src="<?= mediaUrl($image['url']) ?>" alt="<?= htmlspecialchars($actualite['titre']) ?>" loading="lazy">
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -61,7 +61,7 @@ $carouselConfig = analyzeImagesForCarousel($images);
                     <?php endif; ?>
 
                     <div class="news-body">
-                        <?= $actualite['contenu'] ?>
+                        <?= \App\Core\HtmlSanitizer::clean($actualite['contenu'] ?? '') ?>
                     </div>
                 </div>
 

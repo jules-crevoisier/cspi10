@@ -1,14 +1,48 @@
 <?php
 
 /**
+ * Fonctions utilitaires globales du site CSPI10.
+ */
+
+/**
+ * Génère une URL absolue compatible dev (serveur PHP) et production (Apache/Dockploy).
+ */
+function url(string $path = ''): string
+{
+    $path = '/' . ltrim($path, '/');
+    $path = preg_replace('#^/public#', '', $path) ?? $path;
+    return rtrim(APP_URL, '/') . $path;
+}
+
+/**
+ * URL publique d'un fichier uploadé (encode les espaces et caractères spéciaux).
+ */
+function mediaUrl(?string $path): string
+{
+    if ($path === null || $path === '') {
+        return '';
+    }
+
+    $path = ltrim(str_replace('\\', '/', $path), '/');
+    $directory = dirname($path);
+    $filename = basename($path);
+    $encoded = rawurlencode($filename);
+
+    if ($directory === '.' || $directory === '') {
+        return '/' . $encoded;
+    }
+
+    return '/' . $directory . '/' . $encoded;
+}
+
+/**
  * Fonction d'aide pour inclure des fichiers de manière sécurisée
  */
-function include_file($path) {
-    $fullPath = __DIR__ . '/../../public/' . $path;
+function include_file(string $path): void
+{
+    $fullPath = PUBLIC_PATH . ltrim($path, '/');
     if (file_exists($fullPath)) {
         include $fullPath;
-    } else {
-        error_log("Fichier non trouvé : $fullPath");
     }
 }
 

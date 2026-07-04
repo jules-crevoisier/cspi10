@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace App\Models;
 
 class ActualiteImage extends BaseModel
@@ -9,18 +11,15 @@ class ActualiteImage extends BaseModel
     {
         return self::insert(self::TABLE, [
             'actualite_id' => $actualiteId,
-            'url'          => $url,
-            'is_primary'   => $isPrimary ? 1 : 0,
-            'position'     => $position,
+            'url' => $url,
+            'is_primary' => $isPrimary ? 1 : 0,
+            'position' => $position,
         ]);
     }
 
     public static function setPrimary(int $actualiteId, int $imageId): void
     {
-        self::$db->prepare(
-            "UPDATE " . self::TABLE . " SET is_primary = 0 WHERE actualite_id = ?"
-        )->execute([$actualiteId]);
-
+        self::run('UPDATE ' . self::TABLE . ' SET is_primary = 0 WHERE actualite_id = ?', [$actualiteId]);
         self::updateRow(self::TABLE, $imageId, ['is_primary' => 1]);
     }
 
@@ -29,18 +28,27 @@ class ActualiteImage extends BaseModel
         return self::deleteRow(self::TABLE, $id);
     }
 
+    /** @return array<int, array<string, mixed>> */
     public static function listByActualite(int $actualiteId): array
     {
-        $stmt = self::$db->prepare("SELECT * FROM " . self::TABLE . " WHERE actualite_id = ? ORDER BY position");
-        $stmt->execute([$actualiteId]);
-        return $stmt->fetchAll();
+        return self::fetchAll(
+            'SELECT * FROM ' . self::TABLE . ' WHERE actualite_id = ? ORDER BY position',
+            [$actualiteId]
+        );
     }
 
+    /** @return array<string, mixed>|null */
     public static function getPrimaryImage(int $actualiteId): ?array
     {
-        $stmt = self::$db->prepare("SELECT * FROM " . self::TABLE . " WHERE actualite_id = ? AND is_primary = 1 LIMIT 1");
-        $stmt->execute([$actualiteId]);
-        $result = $stmt->fetch();
-        return $result ?: null;
+        return self::fetchOne(
+            'SELECT * FROM ' . self::TABLE . ' WHERE actualite_id = ? AND is_primary = 1 LIMIT 1',
+            [$actualiteId]
+        );
+    }
+
+    /** @return array<string, mixed>|null */
+    public static function getById(int $id): ?array
+    {
+        return self::fetchOne('SELECT * FROM ' . self::TABLE . ' WHERE id = ? LIMIT 1', [$id]);
     }
 }

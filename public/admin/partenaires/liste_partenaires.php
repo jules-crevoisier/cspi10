@@ -1,37 +1,12 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-error_log("Début du script liste_partenaires.php");
-
-// Force le rechargement des fichiers
-clearstatcache();
-
-require_once __DIR__ . '/../../../app/config/autoload.php';
-error_log("Autoloader chargé");
-
-require_once __DIR__ . '/../../../app/config/config.php';
-error_log("Configuration chargée");
-
 use App\Controller\AdminController;
 use App\Controller\AdminPartenaireController;
 use App\Models\Partenaire;
 
-error_log("Classes importées");
-
-// Vérification de l'authentification
 $adminController = new AdminController();
 $adminController->requireLogin();
-error_log("Authentification vérifiée");
 
-// Initialisation de la connexion à la base de données
-// Ce n'est plus nécessaire ici car nous l'avons déplacé dans le contrôleur
-// Partenaire::init(DB_HOST, DB_NAME, DB_USER, DB_PASS);
-error_log("Connexion à la base de données initialisée");
-
-// Récupération de tous les partenaires via le contrôleur
 $controller = new AdminPartenaireController();
-error_log("Contrôleur instancié");
 
 $partenaires = $controller->index();
 error_log("Partenaires récupérés");
