@@ -1,88 +1,96 @@
 <?php
+declare(strict_types=1);
+
 namespace App\Controller;
 
-use Exception;
+/**
+ * Formulaire de contact — envoi via l'API Resend (clé dans .env uniquement).
+ */
+class ContactController
+{
+    private string $resendApiKey;
+    private string $fromEmail;
+    private string $toEmail;
+    private string $fromName;
 
-class ContactController {
-    private $resendApiKey;
-    private $fromEmail;
-    private $toEmail;
-    private $fromName;
-
-    public function __construct() {
-        // Configuration depuis le fichier config.php
+    public function __construct()
+    {
         $this->resendApiKey = RESEND_API_KEY;
         $this->fromEmail = CONTACT_FROM_EMAIL;
-        $this->toEmail = CONTACT_TO_EMAIL; // Email de destination - modifiable dans config.php
+        $this->toEmail = CONTACT_TO_EMAIL;
         $this->fromName = CONTACT_FROM_NAME;
     }
 
-    /**
-     * Traiter l'envoi du formulaire de contact
-     */
-    public function sendMessage() {
+    public function sendMessage(): void
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            return $this->jsonResponse(['success' => false, 'message' => 'Méthode non autorisée']);
+            $this->jsonResponse(['success' => false, 'message' => 'Méthode non autorisée']);
         }
 
-        // Validation des données
+        if ($this->resendApiKey === '') {
+            error_log('[Contact] RESEND_API_KEY non configurée');
+            $this->jsonResponse([
+                'success' => false,
+                'message' => 'Le formulaire de contact est temporairement indisponible.',
+            ]);
+        }
+
         $name = trim($_POST['name'] ?? '');
         $email = trim($_POST['email'] ?? '');
         $subject = trim($_POST['subject'] ?? '');
         $message = trim($_POST['message'] ?? '');
 
         $errors = $this->validateForm($name, $email, $subject, $message);
-        if (!empty($errors)) {
-            return $this->jsonResponse(['success' => false, 'message' => implode(', ', $errors)]);
+        if ($errors !== []) {
+            $this->jsonResponse(['success' => false, 'message' => implode(', ', $errors)]);
         }
 
-        // Envoi de l'email via Resend
-        $emailSent = $this->sendEmailViaResend($name, $email, $subject, $message);
-
-        if ($emailSent) {
-            return $this->jsonResponse(['success' => true, 'message' => 'Votre message a été envoyé avec succès !']);
-        } else {
-            return $this->jsonResponse(['success' => false, 'message' => 'Erreur lors de l\'envoi du message. Veuillez réessayer.']);
+        if ($this->sendEmailViaResend($name, $email, $subject, $message)) {
+            $this->jsonResponse(['success' => true, 'message' => 'Votre message a été envoyé avec succès !']);
         }
+
+        $this->jsonResponse([
+            'success' => false,
+            'message' => 'Erreur lors de l\'envoi du message. Veuillez réessayer.',
+        ]);
     }
 
     /**
-     * Valider les données du formulaire
+     * @return list<string>
      */
-    private function validateForm($name, $email, $subject, $message) {
+    private function validateForm(string $name, string $email, string $subject, string $message): array
+    {
         $errors = [];
 
-        if (empty($name)) {
+        if ($name === '') {
             $errors[] = 'Le nom est requis';
         }
 
-        if (empty($email)) {
+        if ($email === '') {
             $errors[] = 'L\'email est requis';
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors[] = 'Format d\'email invalide';
         }
 
-        if (empty($subject)) {
+        if ($subject === '') {
             $errors[] = 'Le sujet est requis';
         }
 
-        if (empty($message)) {
+        if ($message === '') {
             $errors[] = 'Le message est requis';
         }
 
         return $errors;
     }
 
-    /**
-     * Envoyer l'email via l'API Resend
-     */
-    private function sendEmailViaResend($name, $email, $subject, $message) {
+    private function sendEmailViaResend(string $name, string $email, string $subject, string $message): bool
+    {
         $data = [
             'from' => $this->fromName . ' <' . $this->fromEmail . '>',
-            'to' => [$this->toEmail], // Email de destination
+            'to' => [$this->toEmail],
             'subject' => '[Contact Site] ' . $subject,
             'html' => $this->buildEmailTemplate($name, $email, $subject, $message),
-            'reply_to' => $email // Permet de répondre directement à l'expéditeur
+            'reply_to' => $email,
         ];
 
         $ch = curl_init();
@@ -92,24 +100,22 @@ class ContactController {
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Authorization: Bearer ' . $this->resendApiKey,
-            'Content-Type: application/json'
+            'Content-Type: application/json',
         ]);
 
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_exec($ch);
+        $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        // Log pour debug
-        error_log("Resend API Response: " . $response);
-        error_log("HTTP Code: " . $httpCode);
+        if ($httpCode !== 200) {
+            error_log('[Contact] Resend HTTP ' . $httpCode);
+        }
 
         return $httpCode === 200;
     }
 
-    /**
-     * Construire le template HTML de l'email
-     */
-    private function buildEmailTemplate($name, $email, $subject, $message) {
+    private function buildEmailTemplate(string $name, string $email, string $subject, string $message): string
+    {
         return '
         <!DOCTYPE html>
         <html>
@@ -131,7 +137,7 @@ class ContactController {
             <div class="container">
                 <div class="header">
                     <h1>Nouveau message de contact</h1>
-                    <p>Reçu depuis le site FDPCI Aube</p>
+                    <p>Reçu depuis le site CSPI10</p>
                 </div>
                 <div class="content">
                     <div class="field">
@@ -152,8 +158,7 @@ class ContactController {
                     </div>
                 </div>
                 <div class="footer">
-                    <p>Ce message a été envoyé depuis le formulaire de contact du site FDPCI Aube</p>
-                    <p>Vous pouvez répondre directement à cet email</p>
+                    <p>Ce message a été envoyé depuis le formulaire de contact du site CSPI10</p>
                 </div>
             </div>
         </body>
@@ -161,30 +166,12 @@ class ContactController {
     }
 
     /**
-     * Changer l'email de destination
-     * @param string $newEmail Nouvel email de destination
+     * @param array<string, mixed> $data
      */
-    public function setDestinationEmail($newEmail) {
-        if (filter_var($newEmail, FILTER_VALIDATE_EMAIL)) {
-            $this->toEmail = $newEmail;
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Obtenir l'email de destination actuel
-     */
-    public function getDestinationEmail() {
-        return $this->toEmail;
-    }
-
-    /**
-     * Réponse JSON
-     */
-    private function jsonResponse($data) {
+    private function jsonResponse(array $data): void
+    {
         header('Content-Type: application/json');
         echo json_encode($data);
         exit;
     }
-} 
+}

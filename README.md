@@ -48,7 +48,8 @@ Documentation complète : [docs/testing.md](docs/testing.md)
 
 | Fichier | Contenu |
 |---------|---------|
-| [docs/database.md](docs/database.md) | SQLite dans Docker vs Turso |
+| [docs/database.md](docs/database.md) | SQLite dans Docker |
+| [docs/security.md](docs/security.md) | Secrets, clés API, rotation Resend |
 | [docs/deployment.md](docs/deployment.md) | Déploiement Dockploy |
 | [docs/testing.md](docs/testing.md) | Tests E2E Playwright |
 | [docs/espace-adherent.md](docs/espace-adherent.md) | Espace adhérent |

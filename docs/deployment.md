@@ -34,14 +34,10 @@ APP_DEBUG=false
 APP_URL=https://votre-domaine.fr
 APP_SECRET=<32+ caractères aléatoires>
 
-# Option A — SQLite (simple)
+# Option A — SQLite (recommandé)
 DATABASE_PATH=database/data/cspi.db
 
-# Option B — Turso (recommandé production)
-TURSO_DATABASE_URL=libsql://votre-db.turso.io
-TURSO_AUTH_TOKEN=<token>
-
-RESEND_API_KEY=<clé>
+RESEND_API_KEY=<clé Resend — jamais dans le code>
 CONTACT_FROM_EMAIL=no-reply@votre-domaine.fr
 CONTACT_TO_EMAIL=contact@votre-domaine.fr
 CONTACT_FROM_NAME="Site CSPI10"
@@ -49,17 +45,9 @@ ESPACE_ADHERENT_PASSWORD=<mot de passe fort>
 SITE_URL=https://votre-domaine.fr
 ```
 
-## 5. Turso (production)
+Voir [docs/security.md](security.md) pour la gestion des secrets et la rotation des clés.
 
-```bash
-turso db create cspi10-prod
-turso db tokens create cspi10-prod
-turso db shell cspi10-prod < database/schema.sql
-```
-
-Puis configurer `TURSO_DATABASE_URL` et `TURSO_AUTH_TOKEN` dans Dockploy.
-
-## 6. Premier déploiement
+## 5. Premier déploiement
 
 Au démarrage, le conteneur exécute automatiquement :
 
@@ -72,7 +60,7 @@ Au démarrage, le conteneur exécute automatiquement :
 docker exec -it <container> php scripts/reset-admin-password.php VotreMotDePasse
 ```
 
-## 7. Vérification post-déploiement
+## 6. Vérification post-déploiement
 
 - [ ] `https://votre-domaine.fr/` — page d'accueil
 - [ ] `https://votre-domaine.fr/health` — `{"status":"ok"}`
@@ -80,7 +68,7 @@ docker exec -it <container> php scripts/reset-admin-password.php VotreMotDePasse
 - [ ] Formulaire de contact (avec Resend configuré)
 - [ ] Upload d'image dans l'admin
 
-## 8. Mises à jour
+## 7. Mises à jour
 
 Push sur la branche connectée → Dockploy rebuild et redéploie.
 

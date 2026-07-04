@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../../app/config/autoload.php';
-require_once __DIR__ . '/../../app/config/config.php';
+require_once __DIR__ . '/../../app/bootstrap.php';
 
 use App\Models\Bien;
 use App\Models\BienImage;

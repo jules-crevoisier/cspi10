@@ -25,10 +25,12 @@ Database::boot(ROOT_PATH);
 define('PUBLIC_PATH', ROOT_PATH . '/public/');
 define('UPLOADS_PATH', PUBLIC_PATH . 'uploads/');
 define('APP_URL', rtrim(Env::get('APP_URL', 'http://localhost:8000') ?? 'http://localhost:8000', '/'));
+define('APP_SECRET', Env::get('APP_SECRET', '') ?? '');
 
 define('RESEND_API_KEY', Env::get('RESEND_API_KEY', '') ?? '');
 define('CONTACT_FROM_EMAIL', Env::get('CONTACT_FROM_EMAIL', 'no-reply@localhost') ?? 'no-reply@localhost');
 define('CONTACT_TO_EMAIL', trim(Env::get('CONTACT_TO_EMAIL', 'contact@localhost') ?? 'contact@localhost'));
+define('CONTACT_FROM_NAME', Env::get('CONTACT_FROM_NAME', 'Site CSPI10') ?? 'Site CSPI10');
 define('SITE_URL', Env::get('SITE_URL', Env::get('APP_URL', 'http://localhost:8000')) ?? 'http://localhost:8000');
 define('ESPACE_ADHERENT_PASSWORD', Env::get('ESPACE_ADHERENT_PASSWORD', '') ?? '');
 

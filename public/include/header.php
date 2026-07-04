@@ -1,5 +1,6 @@
-<?php 
-// Inclusion du système SEO
+<?php
+// Bootstrap puis SEO (SITE_URL, APP_URL…)
+require_once __DIR__ . '/../../app/bootstrap.php';
 require_once __DIR__ . '/../../app/config/seo.php';
 
 // Détermination de la page actuelle pour le SEO
