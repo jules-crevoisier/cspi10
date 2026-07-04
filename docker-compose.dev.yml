@@ -1,0 +1,10 @@
+# Surcharge développement local — publie le port 8080 sur la machine hôte
+# Usage : docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+
+services:
+  web:
+    ports:
+      - "8080:8080"
+    read_only: false
+    security_opt: []
+    tmpfs: []

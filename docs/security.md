@@ -36,6 +36,13 @@ git filter-repo --path app/config/config.php --invert-paths
 # ou BFG Repo-Cleaner sur la chaîne leakée
 ```
 
+## Docker (production)
+
+- Port interne **8080** uniquement — pas de bind sur le port 80 de l'hôte
+- Traefik / Dockploy route le trafic HTTPS vers le conteneur
+- Filesystem **read-only** + volumes pour données persistantes
+- `composer audit` + `npm audit` en CI (workflow `security.yml`)
+
 ## Vérification locale
 
 Avant chaque push, chercher des fuites :

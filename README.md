@@ -76,10 +76,12 @@ docs/             Documentation
 ## Docker local
 
 ```powershell
-docker compose up --build
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 ```
 
-Site accessible sur http://localhost:8080
+Site accessible sur http://localhost:8080 (port publié uniquement en dev via `docker-compose.dev.yml`).
+
+En production (Dockploy), le conteneur écoute en interne sur le port **8080** — Traefik route le domaine sans bind sur le port 80 de l'hôte.
 
 La base SQLite est stockée dans le volume Docker `cspi_data` (`database/data/cspi.db`). Voir [docs/database.md](docs/database.md).
 

@@ -14,8 +14,10 @@ Guide pas à pas pour déployer le site CSPI10 sur [Dockploy](https://dockploy.c
 |-----------|--------|
 | Type de build | Dockerfile |
 | Dockerfile | `./Dockerfile` (racine) |
-| Port exposé | `80` |
+| **Container Port** | **`8080`** (interne — pas de bind sur le port 80 de l'hôte) |
 | Health check | `GET /health` |
+
+> **Important** : le conteneur écoute sur le port **8080** en interne. Dockploy / Traefik route le trafic HTTPS (443) vers ce port via le réseau Docker — **ne publiez pas** de port sur l'hôte dans Dockploy.
 
 ## 3. Volumes persistants
 
