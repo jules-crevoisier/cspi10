@@ -5,6 +5,14 @@
  */
 
 /**
+ * Échappe une chaîne HTML (accepte null — PHP 8.3+).
+ */
+function e(?string $value): string
+{
+    return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
+}
+
+/**
  * Génère une URL absolue compatible dev (serveur PHP) et production (Apache/Dockploy).
  */
 function url(string $path = ''): string
@@ -49,7 +57,10 @@ function include_file(string $path): void
 /**
  * Fonction pour formater une date en français
  */
-function formatDateFrench($date) {
+function formatDateFrench(?string $date): string {
+    if ($date === null || $date === '') {
+        return '';
+    }
     $mois = [
         1 => 'janvier', 2 => 'février', 3 => 'mars', 4 => 'avril',
         5 => 'mai', 6 => 'juin', 7 => 'juillet', 8 => 'août',

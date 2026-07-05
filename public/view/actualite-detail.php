@@ -26,10 +26,12 @@ $carouselConfig = analyzeImagesForCarousel($images);
     <main>
         <section class="hero">
             <div class="hero-content">
-                <h1><?= htmlspecialchars($actualite['titre']) ?></h1>
+                <h1><?= e($actualite['titre']) ?></h1>
                 <div class="news-meta">
-                    <span class="news-category"><?= ucfirst($actualite['categorie']) ?></span>
-                    <span class="news-date white-date"><?= formatDateFrench($actualite['publie_le']) ?></span>
+                    <span class="news-category"><?= ucfirst(e($actualite['categorie'])) ?></span>
+                    <?php if (!empty($actualite['publie_le'])): ?>
+                        <span class="news-date white-date"><?= formatDateFrench($actualite['publie_le']) ?></span>
+                    <?php endif; ?>
                 </div>
             </div>
         </section>
@@ -41,7 +43,7 @@ $carouselConfig = analyzeImagesForCarousel($images);
                         <div class="swiper-wrapper">
                             <?php foreach ($images as $image): ?>
                                 <div class="swiper-slide">
-                                    <img src="<?= mediaUrl($image['url']) ?>" alt="<?= htmlspecialchars($actualite['titre']) ?>" loading="lazy">
+                                    <img src="<?= mediaUrl($image['url']) ?>" alt="<?= e($actualite['titre']) ?>" loading="lazy">
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -54,7 +56,7 @@ $carouselConfig = analyzeImagesForCarousel($images);
                 <div class="news-content">
                     <?php if (!empty($actualite['extrait'])): ?>
                         <div class="news-excerpt">
-                            <?= htmlspecialchars($actualite['extrait']) ?>
+                            <?= e($actualite['extrait']) ?>
                         </div>
                     <?php endif; ?>
 

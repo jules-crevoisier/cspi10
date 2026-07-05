@@ -50,6 +50,12 @@ final class ErrorHandler
         if (!(error_reporting() & $severity)) {
             return false;
         }
+
+        if ($severity === E_DEPRECATED || $severity === E_USER_DEPRECATED) {
+            error_log("[DEPRECATED] {$message} in {$file}:{$line}");
+            return true;
+        }
+
         throw new \ErrorException($message, 0, $severity, $file, $line);
     }
 
@@ -69,7 +75,9 @@ final class ErrorHandler
         bool $isAdmin,
         string $alertType
     ): void {
-        http_response_code($status);
+        if (!headers_sent()) {
+            http_response_code($status);
+        }
 
         if ($isJson) {
             header('Content-Type: application/json; charset=utf-8');

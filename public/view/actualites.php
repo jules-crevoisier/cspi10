@@ -3,13 +3,13 @@ use App\Models\ActualiteImage;
 include __DIR__ . '/../include/header.php';
 
 /* --------------------------------------------------------------------------
-   1.  Pagination côté PHP
+   Pagination côté PHP
 -------------------------------------------------------------------------- */
 $actualites_par_page = 6;
 $total_actualites    = count($actualites);
-$total_pages         = ceil($total_actualites / $actualites_par_page);
+$total_pages         = max(1, (int) ceil($total_actualites / $actualites_par_page));
 
-$page_courante = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$page_courante = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $page_courante = max(1, min($page_courante, $total_pages));
 
 $debut           = ($page_courante - 1) * $actualites_par_page;
@@ -17,30 +17,23 @@ $actualites_page = array_slice($actualites, $debut, $actualites_par_page);
 
 $slug = fn(string $s) => strtolower(trim($s));
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Actualités – FDPCI</title>
-</head>
-<body>
+
 <main>
     <section class="hero">
         <div class="hero-content">
             <h1>Actualités</h1>
-            <p>Restez informé des dernières nouvelles et événements de la FDPCI</p>
+            <p>Restez informé des dernières nouvelles et événements de la CSPI10</p>
         </div>
     </section>
 
     <section class="properties-section">
         <div class="container">
 
-            <!-- Filtres (style identique à la page Bien) -->
             <div class="filters">
                 <button class="filter-btn active" data-cat="all">Toutes les actualités</button>
                 <?php foreach ($categories as $cat): ?>
                     <button class="filter-btn" data-cat="<?= $slug($cat) ?>">
-                        <?= ucfirst(htmlspecialchars($cat)) ?>
+                        <?= ucfirst(e($cat)) ?>
                     </button>
                 <?php endforeach; ?>
             </div>
@@ -48,22 +41,26 @@ $slug = fn(string $s) => strtolower(trim($s));
             <div class="news-grid">
                 <?php foreach ($actualites_page as $actu): ?>
                     <?php $catSlug = $slug($actu['categorie']); ?>
-                    <article class="news-card" data-cat="<?= $catSlug ?>">
+                    <article class="news-card" data-cat="<?= e($catSlug) ?>">
                         <div class="news-image">
                             <?php
                             $img = ActualiteImage::getPrimaryImage($actu['id']);
-                            $url = $img ? mediaUrl($img['url']) : 'https://picsum.photos/800/600?random='.$actu['id'];
+                            $url = $img ? mediaUrl($img['url']) : 'https://picsum.photos/800/600?random=' . $actu['id'];
                             ?>
-                            <img src="<?= $url ?>" alt="<?= htmlspecialchars($actu['titre']) ?>" loading="lazy">
+                            <img src="<?= e($url) ?>" alt="<?= e($actu['titre']) ?>" loading="lazy">
                         </div>
                         <div class="news-content">
                             <div class="news-meta">
-                                <span class="news-category"><?= ucfirst(htmlspecialchars($actu['categorie'])) ?></span>
-                                <span class="news-date"><?= formatDateFrench($actu['publie_le']) ?></span>
+                                <span class="news-category"><?= ucfirst(e($actu['categorie'])) ?></span>
+                                <?php if (!empty($actu['publie_le'])): ?>
+                                    <span class="news-date"><?= formatDateFrench($actu['publie_le']) ?></span>
+                                <?php endif; ?>
                             </div>
-                            <h3 class="news-title"><?= htmlspecialchars($actu['titre']) ?></h3>
-                            <p class="news-excerpt"><?= htmlspecialchars($actu['extrait']) ?></p>
-                            <a href="/index.php/actualite/<?= $actu['id'] ?>" class="read-more">
+                            <h3 class="news-title"><?= e($actu['titre']) ?></h3>
+                            <?php if (!empty($actu['extrait'])): ?>
+                                <p class="news-excerpt"><?= e($actu['extrait']) ?></p>
+                            <?php endif; ?>
+                            <a href="<?= url('/actualite/' . $actu['id']) ?>" class="read-more">
                                 Lire la suite <i class="fas fa-arrow-right"></i>
                             </a>
                         </div>
@@ -137,7 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 <style>
-/* ----------- Grille et cartes ----------- */
 .news-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
@@ -151,15 +147,10 @@ document.addEventListener('DOMContentLoaded', () => {
     border-radius:var(--border-radius);
     margin:2rem 0;
 }
-
-/* ----------- Pagination (identique bien.php) ----------- */
 .pagination{display:flex;justify-content:center;gap:10px;margin-top:2rem;}
 .pagination .page-btn{
     padding:8px 16px;border:1px solid #ddd;border-radius:4px;text-decoration:none;transition:.3s;
 }
 .pagination .page-btn:hover{background:#f5f5f5;}
 .pagination .page-btn.active{background:#007cba;color:#fff;border-color:#007cba;}
-
 </style>
-</body>
-</html>
