@@ -38,6 +38,11 @@ final class Request
             return;
         }
 
+        $path = parse_url(self::uri(), PHP_URL_PATH) ?: '/';
+        if (in_array($path, ['/health', '/health.php'], true)) {
+            return;
+        }
+
         $appUrl = Env::get('APP_URL', '') ?? '';
         if ($appUrl !== '' && str_starts_with($appUrl, 'https://')) {
             header('Location: https://' . self::host() . self::uri(), true, 301);

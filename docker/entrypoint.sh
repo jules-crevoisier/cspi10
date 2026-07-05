@@ -5,7 +5,7 @@ cd /var/www/html
 
 if [ ! -f .env ] && [ -f .env.example ]; then
     cp .env.example .env
-    echo "[entrypoint] Fichier .env créé depuis .env.example — configurez vos variables."
+    echo "[entrypoint] Fichier .env créé depuis .env.example — définissez APP_SECRET, RESEND_API_KEY, etc. dans Dockploy."
 fi
 
 mkdir -p database/data public/uploads/biens public/uploads/actualites public/uploads/partenaires
