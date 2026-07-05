@@ -9,5 +9,7 @@ playwright-report/
 test-results/
 blob-report/
 *.log
+storage/backups/
 backup-cspi.sql
+deploy-restore.tar.gz
 uploads-backup.tar.gz

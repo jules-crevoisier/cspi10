@@ -45,9 +45,9 @@ COPY scripts ./scripts
 COPY docker ./docker
 COPY .env.example ./
 
-RUN mkdir -p database/data public/uploads/biens public/uploads/actualites public/uploads/partenaires \
-    && chown -R www-data:www-data database/data public/uploads \
-    && chmod +x docker/entrypoint.sh docker/healthcheck.sh
+RUN mkdir -p database/data public/uploads/biens public/uploads/actualites public/uploads/partenaires storage/backups \
+    && chown -R www-data:www-data database/data public/uploads storage/backups \
+    && chmod +x docker/entrypoint.sh docker/healthcheck.sh docker/restore-backup.sh docker/restore-on-start.sh
 
 COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
 COPY docker/apache-security.conf /etc/apache2/conf-available/security-custom.conf
