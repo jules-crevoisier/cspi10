@@ -23,8 +23,13 @@ Guide pas à pas pour déployer le site CSPI10 sur [Dockploy](https://dockploy.c
 
 | Chemin conteneur | Usage |
 |------------------|-------|
-| `/var/www/html/public/uploads` | Images uploadées (biens, actualités, partenaires) |
-| `/var/www/html/database/data` | Base SQLite (si pas Turso) |
+| `/var/www/html/public/uploads` | Images (persistantes après le 1er déploiement) |
+| `/var/www/html/database/data` | Base SQLite `cspi.db` |
+
+> **Données dans Git** : `database/data/cspi.db` et `public/uploads/` sont versionnés dans le dépôt.
+> Au **premier** démarrage (volume vide), l'entrypoint copie automatiquement ces fichiers depuis l'image Docker.
+> Les déploiements suivants **conservent** le volume — les changements faits en prod ne sont pas écrasés par Git.
+> Pour réinitialiser depuis Git : supprimez les volumes Dockploy puis redéployez.
 
 ## 4. Variables d'environnement
 
@@ -77,4 +82,9 @@ docker exec -it <container> php scripts/reset-admin-password.php VotreMotDePasse
 
 Push sur la branche connectée → Dockploy rebuild et redéploie.
 
-Les volumes persistent les uploads et la base SQLite entre les déploiements.
+Pour publier du **contenu modifié en local** (actualités, images, etc.) :
+
+1. Committer `database/data/cspi.db` et `public/uploads/`
+2. Push sur GitHub
+3. **Premier déploiement** : les données sont injectées automatiquement
+4. **Prod déjà en place** : supprimer les volumes ou copier manuellement (`docker cp`)

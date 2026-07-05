@@ -3,8 +3,8 @@
 .env
 .env.*
 !.env.example
-database/data/
-public/uploads/
+database/data/cspi-test.db
+database/data/*-test.db
 vendor/
 node_modules/
 e2e/
@@ -19,8 +19,7 @@ package-lock.json
 *.log
 backup-cspi.sql
 uploads-backup.tar.gz
+deploy-restore.tar.gz
 .cursor
 .vscode
 .idea
-*.tar.gz
-*.sql

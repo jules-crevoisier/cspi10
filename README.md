@@ -28,11 +28,7 @@ php -S localhost:8000 -t public public/index.php
 | Admin | http://localhost:8000/admin/login |
 | Health | http://localhost:8000/health |
 
-**Identifiants admin par défaut** (seed) — voir `database/seed.sql`. Changez-les en production :
-
-```powershell
-php scripts/reset-admin-password.php VotreMotDePasse
-```
+**Identifiants admin** — voir `database/seed.sql` (compte production CSPI10).
 
 ## Tests
 
@@ -64,6 +60,7 @@ app/
   models/         Accès données
   bootstrap.php   Initialisation applicative
 public/           Document root (Apache / serveur PHP)
+resources/admin/  Vues administration (hors web root)
 database/
   schema.sql      Schéma SQLite / Turso
   seed.sql        Données initiales (admin)

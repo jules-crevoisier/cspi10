@@ -1,15 +1,17 @@
 .env
 .env.*
 !.env.example
-database/data/
-public/uploads/
+
+# Bases de test uniquement (E2E)
+database/data/cspi-test.db
+database/data/*-test.db
+
 vendor/
 node_modules/
 playwright-report/
 test-results/
 blob-report/
 *.log
-storage/backups/
 backup-cspi.sql
-deploy-restore.tar.gz
 uploads-backup.tar.gz
+deploy-restore.tar.gz

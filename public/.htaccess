@@ -1,14 +1,9 @@
 RewriteEngine On
 
-# Si le fichier ou dossier n'existe pas
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
+# Seuls les fichiers réels (assets, uploads, favicons…) sont servis directement.
+# Les dossiers comme /admin/ ne doivent PAS court-circuiter le routeur.
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
 
-# Rediriger toutes les requêtes vers index.php
-RewriteRule ^(.*)$ index.php [QSA,L]
-
-# Autoriser l'accès direct aux fichiers statiques
-<FilesMatch "\.(css|js|jpg|jpeg|png|gif|ico)$">
-    Order Allow,Deny
-    Allow from all
-</FilesMatch> 
+# Tout le reste → front controller
+RewriteRule ^ index.php [QSA,L]

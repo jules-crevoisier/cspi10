@@ -36,7 +36,7 @@
                     <a href="/public/contact">
                         <i class="fas fa-envelope"></i> Contact
                     </a>
-                    <a href="/public/admin/login">
+                    <a href="<?= url('/admin/login') ?>">
                         <i class="fas fa-lock"></i> Administration
                     </a>
                 </div>

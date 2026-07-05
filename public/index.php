@@ -102,64 +102,64 @@ switch ($uri) {
 
     // Administration
     case '/admin/login':
-        require __DIR__ . '/admin/login.php';
+        require ADMIN_PATH . 'login.php';
         break;
 
     case '/admin/dashboard':
-        require __DIR__ . '/admin/admin.php';
+        require ADMIN_PATH . 'admin.php';
         break;
 
     case '/admin/logout':
-        require __DIR__ . '/admin/logout.php';
+        require ADMIN_PATH . 'logout.php';
         break;
 
     case '/admin/actualites/liste_actualites':
     case '/admin/actualites':
-        require __DIR__ . '/admin/actualites/liste_actualites.php';
+        require ADMIN_PATH . 'actualites/liste_actualites.php';
         break;
 
     case '/admin/actualites/create':
     case '/admin/actualites/edit':
-        require __DIR__ . '/admin/actualites/form.php';
+        require ADMIN_PATH . 'actualites/form.php';
         break;
 
     case (preg_match('/^\/admin\/actualites\/edit\/(\d+)$/', $uri, $matches) ? true : false):
         $_GET['id'] = $matches[1];
-        require __DIR__ . '/admin/actualites/form.php';
+        require ADMIN_PATH . 'actualites/form.php';
         break;
 
     case (preg_match('/^\/admin\/actualites\/delete\/(\d+)$/', $uri, $matches) ? true : false):
         $_GET['id'] = $matches[1];
-        require __DIR__ . '/admin/actualites/delete_confirm.php';
+        require ADMIN_PATH . 'actualites/delete_confirm.php';
         break;
 
     case '/admin/biens/liste_biens':
     case '/admin/biens':
-        require __DIR__ . '/admin/biens/liste_biens.php';
+        require ADMIN_PATH . 'biens/liste_biens.php';
         break;
 
     case '/admin/biens/create':
     case '/admin/biens/edit':
-        require __DIR__ . '/admin/biens/form.php';
+        require ADMIN_PATH . 'biens/form.php';
         break;
 
     case (preg_match('/^\/admin\/biens\/edit\/(\d+)$/', $uri, $matches) ? true : false):
         $_GET['id'] = $matches[1];
-        require __DIR__ . '/admin/biens/form.php';
+        require ADMIN_PATH . 'biens/form.php';
         break;
 
     case (preg_match('/^\/admin\/biens\/delete\/(\d+)$/', $uri, $matches) ? true : false):
         $_GET['id'] = $matches[1];
-        require __DIR__ . '/admin/biens/delete.php';
+        require ADMIN_PATH . 'biens/delete.php';
         break;
 
     case '/admin/biens/detail':
-        require __DIR__ . '/admin/biens/detail.php';
+        require ADMIN_PATH . 'biens/detail.php';
         break;
 
     case (preg_match('/^\/admin\/biens\/detail\/(\d+)$/', $uri, $matches) ? true : false):
         $_GET['id'] = $matches[1];
-        require __DIR__ . '/admin/biens/detail.php';
+        require ADMIN_PATH . 'biens/detail.php';
         break;
 
     case (preg_match('/^\/admin\/biens\/view\/(\d+)$/', $uri, $matches) ? true : false):
@@ -169,22 +169,22 @@ switch ($uri) {
 
     case '/admin/partenaires/liste_partenaires':
     case '/admin/partenaires':
-        require __DIR__ . '/admin/partenaires/liste_partenaires.php';
+        require ADMIN_PATH . 'partenaires/liste_partenaires.php';
         break;
 
     case '/admin/partenaires/create':
     case '/admin/partenaires/edit':
-        require __DIR__ . '/admin/partenaires/form.php';
+        require ADMIN_PATH . 'partenaires/form.php';
         break;
 
     case (preg_match('/^\/admin\/partenaires\/edit\/(\d+)$/', $uri, $matches) ? true : false):
         $_GET['id'] = $matches[1];
-        require __DIR__ . '/admin/partenaires/form.php';
+        require ADMIN_PATH . 'partenaires/form.php';
         break;
 
     case (preg_match('/^\/admin\/partenaires\/delete\/(\d+)$/', $uri, $matches) ? true : false):
         $_GET['id'] = $matches[1];
-        require __DIR__ . '/admin/partenaires/delete.php';
+        require ADMIN_PATH . 'partenaires/delete.php';
         break;
 
     case (preg_match('/^\/admin\/actualites\/(\d+)\/image\/(\d+)\/delete$/', $uri, $matches) ? true : false):

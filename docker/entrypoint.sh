@@ -8,16 +8,21 @@ if [ ! -f .env ] && [ -f .env.example ]; then
     echo "[entrypoint] Fichier .env créé depuis .env.example — configurez vos variables."
 fi
 
-# Restauration auto si /backup/deploy-restore.tar.gz est monté (une seule fois)
-if [ -f docker/restore-on-start.sh ]; then
-    bash docker/restore-on-start.sh || {
-        echo "[entrypoint] Échec de la restauration — démarrage annulé."
-        exit 1
-    }
+mkdir -p database/data public/uploads/biens public/uploads/actualites public/uploads/partenaires
+
+# Données versionnées dans Git → copiées dans le volume au 1er démarrage (volume Docker vide)
+if [ -f .image-data/cspi.db ] && [ ! -s database/data/cspi.db ]; then
+    cp .image-data/cspi.db database/data/cspi.db
+    echo "[entrypoint] Base SQLite initialisée depuis l'image (.image-data/cspi.db)."
+fi
+
+if [ -d .image-data/uploads ] && [ -z "$(ls -A public/uploads 2>/dev/null)" ]; then
+    cp -a .image-data/uploads/. public/uploads/
+    echo "[entrypoint] Uploads initialisés depuis l'image (.image-data/uploads)."
 fi
 
 php scripts/migrate.php
 
-chown -R www-data:www-data database/data public/uploads storage/backups 2>/dev/null || true
+chown -R www-data:www-data database/data public/uploads 2>/dev/null || true
 
 exec "$@"

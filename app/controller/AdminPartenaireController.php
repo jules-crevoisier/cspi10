@@ -58,7 +58,7 @@ class AdminPartenaireController extends AdminController
 
             if (Partenaire::create($data)) {
                 error_log("Création réussie, redirection vers la liste des partenaires");
-                header('Location: /index.php/admin/partenaires');
+                header('Location: /admin/partenaires');
                 exit;
             } else {
                 error_log("Échec de la création du partenaire");
@@ -74,7 +74,7 @@ class AdminPartenaireController extends AdminController
         
         if (!$partenaire) {
             error_log("Partenaire avec ID " . $id . " non trouvé");
-            header('Location: /index.php/admin/partenaires');
+            header('Location: /admin/partenaires');
             exit;
         }
 
@@ -113,7 +113,7 @@ class AdminPartenaireController extends AdminController
 
             if (Partenaire::update($id, $data)) {
                 error_log("Mise à jour réussie, redirection vers la liste des partenaires");
-                header('Location: /index.php/admin/partenaires');
+                header('Location: /admin/partenaires');
                 exit;
             } else {
                 error_log("Échec de la mise à jour du partenaire");
@@ -129,7 +129,7 @@ class AdminPartenaireController extends AdminController
 
         if (!$partenaire) {
             $_SESSION['error'] = 'Partenaire non trouvé.';
-            header('Location: /index.php/admin/partenaires');
+            header('Location: /admin/partenaires');
             exit;
         }
 
@@ -144,12 +144,12 @@ class AdminPartenaireController extends AdminController
             } else {
                 $_SESSION['error'] = 'Erreur lors de la suppression du partenaire.';
             }
-            header('Location: /index.php/admin/partenaires');
+            header('Location: /admin/partenaires');
             exit;
         }
 
         // Sinon, afficher le formulaire de confirmation
-        include_once __DIR__ . '/../../public/admin/partenaires/delete_confirm.php';
+        include_once __DIR__ . '/../../resources/admin/partenaires/delete_confirm.php';
     }
 
     /**

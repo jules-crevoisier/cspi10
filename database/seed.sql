@@ -1,9 +1,10 @@
--- Données initiales — mot de passe par défaut : admin (À CHANGER en production !)
--- Hash régénéré avec password_hash('admin', PASSWORD_BCRYPT)
-INSERT OR IGNORE INTO administrateurs (id, email, password, created_at)
+-- Compte administrateur CSPI10 (production)
+INSERT INTO administrateurs (id, email, password, created_at)
 VALUES (
   1,
   'chambredesproprietaires10@gmail.com',
-  '$2y$12$YyAMYLKVTYn1l0wgT/Glpu1lgKCZ7ujFw5qUElcb3XOgNsbJwIESG',
+  '$2y$12$QaOo51viuy3nzGYyh8ACoea27gzZNnWy78lxp1ah5AXiAOmVZ98Ye',
   datetime('now')
-);
+)
+ON CONFLICT(email) DO UPDATE SET
+  password = excluded.password;

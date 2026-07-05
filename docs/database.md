@@ -16,13 +16,13 @@ volumes:
 DATABASE_PATH=database/data/cspi.db
 ```
 
-Au premier démarrage, `scripts/migrate.php` crée le fichier et applique le schéma + seed admin. Le volume Docker **persiste** la base entre les redéploiements.
+Au premier démarrage, l'entrypoint copie `cspi.db` et les uploads depuis l'image (données versionnées dans Git), puis `scripts/migrate.php` applique le schéma. Le volume Docker **persiste** la base entre les redéploiements.
 
 | Avantage | Détail |
 |----------|--------|
 | Simplicité | Un seul conteneur, pas de service BDD externe |
+| Déploiement | `cspi.db` + `public/uploads/` commités dans Git |
 | Sauvegarde | Copier le volume ou le fichier `cspi.db` |
-| Déploiement | Aucune dépendance cloud |
 
 ## Turso — qu'est-ce que c'est ?
 
@@ -72,55 +72,6 @@ Applique `database/schema.sql` puis `database/seed.sql` sur la base cible (SQLit
 ```powershell
 # Copier depuis le conteneur
 docker cp <container>:/var/www/html/database/data/cspi.db ./backup-cspi.db
-docker cp <container>:/var/www/html/public/uploads ./backup-uploads
 ```
 
 Planifiez une copie régulière du volume ou du fichier en production.
-
-## Restaurer une sauvegarde en production
-
-Le script **écrase** la base et les uploads actuels (une copie de l'ancien état est gardée dans `storage/backups/`).
-
-### 1. Préparer le backup sur votre machine
-
-```
-backup/
-  cspi.db
-  uploads/
-    biens/
-    actualites/
-    partenaires/
-```
-
-Ou une archive : `backup.tar.gz` contenant ces fichiers.
-
-### 2. Copier dans le conteneur
-
-```powershell
-$container = "cspi10-prod"
-
-docker exec $container mkdir -p /tmp/restore/uploads
-docker cp ./backup/cspi.db ${container}:/tmp/restore/cspi.db
-docker cp ./backup/uploads/. ${container}:/tmp/restore/uploads/
-```
-
-### 3. Lancer la restauration
-
-```powershell
-docker exec $container bash docker/restore-backup.sh /tmp/restore
-```
-
-Alternative avec archive :
-
-```powershell
-docker cp ./backup.tar.gz ${container}:/tmp/backup.tar.gz
-docker exec $container bash docker/restore-backup.sh /tmp/backup.tar.gz
-```
-
-### 4. Vérifier
-
-- Site en ligne, actualités / biens / images visibles
-- `/health` → `{"status":"ok"}`
-- Connexion admin OK
-
-L'ancienne base et les anciens uploads sont sauvegardés dans `/var/www/html/storage/backups/` (volume non monté par défaut — perdu au redeploy sauf si vous montez `storage/`).

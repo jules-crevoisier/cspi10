@@ -5,6 +5,7 @@ declare(strict_types=1);
  * Bootstrap application — chargé par index.php et scripts CLI.
  */
 define('ROOT_PATH', dirname(__DIR__));
+define('ADMIN_PATH', ROOT_PATH . '/resources/admin/');
 
 require_once ROOT_PATH . '/vendor/autoload.php';
 require_once ROOT_PATH . '/app/config/autoload.php';

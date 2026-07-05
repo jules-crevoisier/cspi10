@@ -62,7 +62,7 @@ class AdminActualiteController extends AdminController
                 }
 
                 error_log("Création réussie, redirection vers la liste des actualités");
-                header('Location: /index.php/admin/actualites');
+                header('Location: /admin/actualites');
                 exit;
             } catch (\Exception $e) {
                 error_log("Erreur dans create: " . $e->getMessage());
@@ -80,7 +80,7 @@ class AdminActualiteController extends AdminController
         
         if (!$actualite) {
             error_log("Actualité avec ID " . $id . " non trouvée");
-            header('Location: /index.php/admin/actualites');
+            header('Location: /admin/actualites');
             exit;
         }
 
@@ -107,7 +107,7 @@ class AdminActualiteController extends AdminController
                     }
 
                     error_log("Mise à jour réussie, redirection vers la liste des actualités");
-                    header('Location: /index.php/admin/actualites');
+                    header('Location: /admin/actualites');
                     exit;
                 } else {
                     throw new \Exception('Erreur lors de la mise à jour de l\'actualité');
@@ -131,7 +131,7 @@ class AdminActualiteController extends AdminController
         if (!$actualite) {
             error_log("Actualité avec ID " . $id . " non trouvée");
             $_SESSION['error'] = 'Actualité non trouvée.';
-            header('Location: /index.php/admin/actualites');
+            header('Location: /admin/actualites');
             exit;
         }
 
@@ -154,12 +154,12 @@ class AdminActualiteController extends AdminController
                 $_SESSION['error'] = 'Une erreur est survenue lors de la suppression de l\'actualité: ' . $e->getMessage();
             }
             
-            header('Location: /index.php/admin/actualites');
+            header('Location: /admin/actualites');
             exit;
         }
 
         // Sinon, afficher le formulaire de confirmation
-        include_once __DIR__ . '/../../public/admin/actualites/delete_confirm.php';
+        include_once __DIR__ . '/../../resources/admin/actualites/delete_confirm.php';
     }
 
     private function handleImages($actualiteId, $files)

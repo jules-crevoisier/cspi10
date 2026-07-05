@@ -25,11 +25,11 @@ class AdminBienController
             // S'assurer que la variable est disponible dans la vue
             $GLOBALS['biens'] = $biens;
             
-            include_once __DIR__ . '/../../public/admin/biens/liste_biens.php';
+            include_once __DIR__ . '/../../resources/admin/biens/liste_biens.php';
         } catch (\Exception $e) {
             error_log("Erreur dans index: " . $e->getMessage());
             $GLOBALS['biens'] = [];
-            include_once __DIR__ . '/../../public/admin/biens/liste_biens.php';
+            include_once __DIR__ . '/../../resources/admin/biens/liste_biens.php';
         }
     }
 
@@ -78,16 +78,16 @@ class AdminBienController
                 }
 
                 error_log("Redirection vers la liste des biens");
-                header('Location: /index.php/admin/biens/liste_biens');
+                header('Location: /admin/biens/liste_biens');
                 exit;
             } catch (\Exception $e) {
                 error_log("Erreur dans create: " . $e->getMessage());
                 $error = 'Une erreur est survenue lors de la création du bien: ' . $e->getMessage();
-                include_once __DIR__ . '/../../public/admin/biens/form.php';
+                include_once __DIR__ . '/../../resources/admin/biens/form.php';
             }
         } else {
             error_log("Affichage du formulaire de création");
-            include_once __DIR__ . '/../../public/admin/biens/form.php';
+            include_once __DIR__ . '/../../resources/admin/biens/form.php';
         }
     }
 
@@ -96,7 +96,7 @@ class AdminBienController
         try {
             $bien = Bien::getById($id);
             if (!$bien) {
-                header('Location: /index.php/admin/biens/liste_biens');
+                header('Location: /admin/biens/liste_biens');
                 exit;
             }
 
@@ -119,15 +119,15 @@ class AdminBienController
                     $this->handleImages($id, $_FILES['images']);
                 }
 
-                header('Location: /index.php/admin/biens/liste_biens');
+                header('Location: /admin/biens/liste_biens');
                 exit;
             }
 
             $images = BienImage::listByBien($id);
-            include_once __DIR__ . '/../../public/admin/biens/form.php';
+            include_once __DIR__ . '/../../resources/admin/biens/form.php';
         } catch (\Exception $e) {
             $error = 'Une erreur est survenue lors de la modification du bien';
-            include_once __DIR__ . '/../../public/admin/biens/form.php';
+            include_once __DIR__ . '/../../resources/admin/biens/form.php';
         }
     }
 
@@ -141,7 +141,7 @@ class AdminBienController
             if (!$bien) {
                 error_log("Bien non trouvé avec l'ID: " . $id);
                 $_SESSION['error'] = 'Bien non trouvé.';
-                header('Location: /index.php/admin/biens');
+                header('Location: /admin/biens');
                 exit;
             }
 
@@ -158,19 +158,19 @@ class AdminBienController
                     $_SESSION['error'] = 'Erreur lors de la suppression du bien.';
                 }
                 
-                header('Location: /index.php/admin/biens');
+                header('Location: /admin/biens');
                 exit;
             }
 
             // Sinon, afficher le formulaire de confirmation
             error_log("Affichage du formulaire de confirmation de suppression");
-            include_once __DIR__ . '/../../public/admin/biens/delete_confirm.php';
+            include_once __DIR__ . '/../../resources/admin/biens/delete_confirm.php';
             
         } catch (\Exception $e) {
             error_log("Exception lors de la suppression: " . $e->getMessage());
             error_log("Stack trace: " . $e->getTraceAsString());
             $_SESSION['error'] = 'Erreur lors de la suppression : ' . $e->getMessage();
-            header('Location: /index.php/admin/biens');
+            header('Location: /admin/biens');
             exit;
         }
     }
@@ -310,7 +310,7 @@ class AdminBienController
             if (!$bien) {
                 error_log("Bien non trouvé avec l'ID: " . $id);
                 $_SESSION['error'] = 'Bien non trouvé.';
-                header('Location: /index.php/admin/biens');
+                header('Location: /admin/biens');
                 exit;
             }
 
@@ -319,13 +319,13 @@ class AdminBienController
             error_log("Images récupérées: " . print_r($images, true));
 
             // Afficher la page de détails
-            include_once __DIR__ . '/../../public/admin/biens/view.php';
+            include_once __DIR__ . '/../../resources/admin/biens/view.php';
             
         } catch (\Exception $e) {
             error_log("Exception dans view(): " . $e->getMessage());
             error_log("Stack trace: " . $e->getTraceAsString());
             $_SESSION['error'] = 'Erreur lors de l\'affichage des détails du bien : ' . $e->getMessage();
-            header('Location: /index.php/admin/biens');
+            header('Location: /admin/biens');
             exit;
         }
     }

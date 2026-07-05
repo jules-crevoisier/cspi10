@@ -40,14 +40,20 @@ COPY --from=vendor /app/vendor ./vendor
 COPY composer.json composer.lock ./
 COPY app ./app
 COPY public ./public
+COPY resources ./resources
 COPY database ./database
 COPY scripts ./scripts
 COPY docker ./docker
 COPY .env.example ./
 
-RUN mkdir -p database/data public/uploads/biens public/uploads/actualites public/uploads/partenaires storage/backups \
-    && chown -R www-data:www-data database/data public/uploads storage/backups \
-    && chmod +x docker/entrypoint.sh docker/healthcheck.sh docker/restore-backup.sh docker/restore-on-start.sh
+# Snapshot déployé (Git) — copié dans les volumes au 1er démarrage
+RUN mkdir -p .image-data/uploads
+COPY database/data/cspi.db .image-data/cspi.db
+COPY public/uploads/ .image-data/uploads/
+
+RUN mkdir -p database/data public/uploads/biens public/uploads/actualites public/uploads/partenaires \
+    && chown -R www-data:www-data database/data public/uploads \
+    && chmod +x docker/entrypoint.sh docker/healthcheck.sh
 
 COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
 COPY docker/apache-security.conf /etc/apache2/conf-available/security-custom.conf

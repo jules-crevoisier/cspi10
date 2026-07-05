@@ -7,9 +7,13 @@
 Fichiers jamais commités :
 
 - `.env`
-- `database/data/*.db`
 - `backup-*.sql`
-- `public/uploads/`
+- `database/data/cspi-test.db` (tests E2E)
+
+Fichiers commités pour le déploiement :
+
+- `database/data/cspi.db` — base SQLite production
+- `public/uploads/` — images du site
 
 ## Variables sensibles
 
