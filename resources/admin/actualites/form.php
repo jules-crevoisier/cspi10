@@ -16,7 +16,7 @@ if (isset($_GET['id'])) {
     $actualite = $controller->edit($id);
     
     if (!$actualite) {
-        header('Location: /admin/actualites');
+        header('Location: ' . url('/admin/actualites'));
         exit;
     }
 }
@@ -30,235 +30,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administration - <?php echo $isEdit ? 'Modifier' : 'Ajouter'; ?> une actualité</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <style>
-        .sidebar {
-            min-height: 100vh;
-            background-color: #343a40;
-            color: white;
-        }
-        .sidebar .nav-link {
-            color: rgba(255,255,255,.75);
-        }
-        .sidebar .nav-link:hover {
-            color: rgba(255,255,255,1);
-        }
-        .sidebar .nav-link.active {
-            color: white;
-            background-color: rgba(255,255,255,.1);
-        }
-        .main-content {
-            padding: 20px;
-        }
-        .form-section {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .form-section h4 {
-            color: #343a40;
-            margin-bottom: 15px;
-        }
-        
-        /* Correction pour l'affichage des erreurs - éviter le rouge sur rouge */
-        .alert-danger {
-            background-color: #f8d7da !important;
-            border-color: #f5c2c7 !important;
-            color: #721c24 !important;
-            border-left: 4px solid #dc3545;
-        }
-        
-        .alert-success {
-            background-color: #d1e7dd !important;
-            border-color: #badbcc !important;
-            color: #0f5132 !important;
-            border-left: 4px solid #198754;
-        }
-        
-        /* Styles pour le carousel d'administration */
-        .admin-image-preview {
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            overflow: hidden;
-            background: #f8f9fa;
-        }
-        
-        .admin-swiper {
-            width: 100%;
-            height: 400px;
-            position: relative;
-        }
-        
-        .admin-swiper.swiper-document-portrait {
-            height: 500px;
-            max-width: 450px;
-            margin: 0 auto;
-        }
-        
-        .admin-swiper.swiper-document-landscape {
-            height: 450px;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        
-        .admin-swiper.swiper-photo {
-            height: 400px;
-        }
-        
-        .admin-slide-content {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-        
-        .admin-slide-content img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background: #fff;
-        }
-        
-        .admin-swiper.swiper-photo .admin-slide-content img {
-            object-fit: cover;
-        }
-        
-        .primary-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(13, 110, 253, 0.9);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            backdrop-filter: blur(5px);
-        }
-        
-        .swiper-button-next,
-        .swiper-button-prev {
-            color: #495057;
-            background: rgba(255, 255, 255, 0.9);
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            margin-top: -17.5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .swiper-button-next:hover,
-        .swiper-button-prev:hover {
-            background: rgba(255, 255, 255, 1);
-            color: #212529;
-        }
-        
-        .swiper-button-next::after,
-        .swiper-button-prev::after {
-            font-size: 16px;
-            font-weight: bold;
-        }
-        
-        .swiper-pagination-bullet {
-            background: rgba(73, 80, 87, 0.5);
-        }
-        
-        .swiper-pagination-bullet-active {
-            background: #495057;
-        }
-        
-        .image-controls {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-        }
-        
-        @media (max-width: 768px) {
-            .admin-swiper,
-            .admin-swiper.swiper-document-portrait,
-            .admin-swiper.swiper-document-landscape,
-            .admin-swiper.swiper-photo {
-                height: 300px;
-                max-width: 100%;
-            }
-            
-            .admin-swiper.swiper-document-portrait {
-                height: 350px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 px-0 sidebar">
-                <div class="p-3">
-                    <h4>Administration</h4>
-                    <a href="/index.php" class="btn btn-sm btn-light mb-3">
-                        <i class="bi bi-house-door"></i> Retour au site
-                    </a>
-                    <hr>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/admin/dashboard">
-                                <i class="bi bi-speedometer2"></i> Tableau de bord
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/admin/biens">
-                                <i class="bi bi-house"></i> Biens
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="/admin/actualites">
-                                <i class="bi bi-newspaper"></i> Actualités
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/admin/partenaires">
-                                <i class="bi bi-people"></i> Partenaires
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/admin/logout">
-                                <i class="bi bi-box-arrow-right"></i> Déconnexion
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+<?php
+$pageTitle = ($isEdit ? 'Modifier' : 'Ajouter') . ' une actualité';
+$activeNav = 'actualites';
+$extraHead = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">';
+ob_start();
+?>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+function deleteImage(actualiteId, imageId) {
+    if (!confirm('Supprimer cette image ?')) return;
+    fetch(`/admin/actualites/${actualiteId}/image/${imageId}/delete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': window.CSPI10.csrfToken }
+    })
+    .then(r => r.json())
+    .then(data => { if (data.success) location.reload(); else alert(data.message || 'Erreur'); })
+    .catch(() => alert('Erreur réseau'));
+}
 
-            <!-- Main content -->
-            <div class="col-md-9 col-lg-10 main-content">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2><?php echo $isEdit ? 'Modifier' : 'Ajouter'; ?> une actualité</h2>
-                    <a href="/admin/actualites" class="btn btn-secondary">
-                        <i class="bi bi-arrow-left"></i> Retour à la liste
-                    </a>
-                </div>
+function setPrimaryImage(actualiteId, imageId) {
+    fetch(`/admin/actualites/${actualiteId}/image/${imageId}/primary`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': window.CSPI10.csrfToken }
+    })
+    .then(r => r.json())
+    .then(data => { if (!data.success) { alert(data.message || 'Erreur'); location.reload(); } })
+    .catch(() => alert('Erreur réseau'));
+}
 
-                <?php if (isset($_SESSION['error'])): ?>
-                <div class="alert alert-danger">
-                    <?php 
-                    echo htmlspecialchars($_SESSION['error']);
-                    unset($_SESSION['error']);
-                    ?>
-                </div>
-                <?php endif; ?>
+document.addEventListener('DOMContentLoaded', function () {
+    const adminSwiper = document.querySelector('.admin-swiper');
+    if (adminSwiper) {
+        new Swiper('.admin-swiper', {
+            loop: true,
+            spaceBetween: 10,
+            centeredSlides: true,
+            pagination: { el: '.swiper-pagination', clickable: true, dynamicBullets: true },
+            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+        });
+    }
+});
+</script>
+<?php
+$extraScripts = ob_get_clean();
+require __DIR__ . '/../include/layout_start.php';
+?>
 
-                <div class="card">
-                    <div class="card-body">
-                        <form method="POST" enctype="multipart/form-data" action="">
-                            <!-- Champs du formulaire -->
+<div class="admin-toolbar">
+    <a href="<?= url('/admin/actualites') ?>" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Retour à la liste
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            <?= \App\Core\Security::csrfField() ?>
                             <div class="form-section">
                                 <div class="mb-3">
                                     <label for="titre" class="form-label">Titre *</label>
@@ -369,99 +197,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <i class="bi bi-save"></i> <?php echo $isEdit ? 'Mettre à jour' : 'Enregistrer'; ?>
                                 </button>
                             </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </form>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-    function deleteImage(actualiteId, imageId) {
-        if (confirm('Êtes-vous sûr de vouloir supprimer cette image ?')) {
-            fetch(`/admin/actualites/${actualiteId}/image/${imageId}/delete`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload();
-                } else {
-                    alert(data.error || 'Une erreur est survenue');
-                }
-            })
-            .catch(error => {
-                console.error('Erreur:', error);
-                alert('Une erreur est survenue');
-            });
-        }
-    }
+</div>
 
-    function setPrimaryImage(actualiteId, imageId) {
-        fetch(`/admin/actualites/${actualiteId}/image/${imageId}/primary`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (!data.success) {
-                alert(data.error || 'Une erreur est survenue');
-                location.reload();
-            }
-        })
-        .catch(error => {
-            console.error('Erreur:', error);
-            alert('Une erreur est survenue');
-            location.reload();
-        });
-    }
-
-    // Initialiser le carousel Swiper pour l'administration
-    document.addEventListener('DOMContentLoaded', function() {
-        const adminSwiper = document.querySelector('.admin-swiper');
-        if (adminSwiper) {
-            new Swiper('.admin-swiper', {
-                loop: true,
-                spaceBetween: 10,
-                centeredSlides: true,
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                    dynamicBullets: true,
-                },
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
-                keyboard: {
-                    enabled: true,
-                },
-                mousewheel: {
-                    forceToAxis: true,
-                },
-                breakpoints: {
-                    320: {
-                        slidesPerView: 1,
-                        spaceBetween: 10
-                    },
-                    768: {
-                        slidesPerView: 1,
-                        spaceBetween: 15
-                    },
-                    1024: {
-                        slidesPerView: 1,
-                        spaceBetween: 20
-                    }
-                }
-            });
-        }
-    });
-    </script>
-</body>
-</html> 
+<?php require __DIR__ . '/../include/layout_end.php'; ?>

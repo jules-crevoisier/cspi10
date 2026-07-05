@@ -72,141 +72,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        header('Location: /admin/biens/detail?id=' . $bienId);
+        header('Location: ' . url('/admin/biens/detail/' . $bienId));
         exit;
     } catch (Exception $e) {
         $error = "Une erreur est survenue : " . $e->getMessage();
     }
 }
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $isEdit ? 'Modifier' : 'Ajouter'; ?> un bien - Administration</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        .sidebar {
-            min-height: 100vh;
-            background-color: #343a40;
-            color: white;
-        }
-        .sidebar .nav-link {
-            color: rgba(255,255,255,.75);
-        }
-        .sidebar .nav-link:hover {
-            color: rgba(255,255,255,1);
-        }
-        .sidebar .nav-link.active {
-            color: white;
-            background-color: rgba(255,255,255,.1);
-        }
-        .main-content {
-            padding: 20px;
-        }
-        .form-section {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .form-section h4 {
-            color: #343a40;
-            margin-bottom: 15px;
-        }
-        .image-preview {
-            max-width: 200px;
-            max-height: 200px;
-            margin: 10px;
-        }
-        .image-container {
-            position: relative;
-            display: inline-block;
-            margin: 10px;
-        }
-        .image-actions {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            display: flex;
-            gap: 5px;
-        }
-        
-        /* Correction pour l'affichage des erreurs - éviter le rouge sur rouge */
-        .alert-danger {
-            background-color: #f8d7da !important;
-            border-color: #f5c2c7 !important;
-            color: #721c24 !important;
-            border-left: 4px solid #dc3545;
-        }
-        
-        .alert-success {
-            background-color: #d1e7dd !important;
-            border-color: #badbcc !important;
-            color: #0f5132 !important;
-            border-left: 4px solid #198754;
-        }
-    </style>
-</head>
-<body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 px-0 sidebar">
-                <div class="p-3">
-                    <h4>Administration</h4>
-                    <a href="/public/" class="btn btn-sm btn-light mb-3">
-                        <i class="bi bi-house-door"></i> Retour au site
-                    </a>
-                    <hr>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/admin/dashboard">
-                                <i class="bi bi-speedometer2"></i> Tableau de bord
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="/admin/biens">
-                                <i class="bi bi-house"></i> Biens
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/admin/actualites/liste_actualites">
-                                <i class="bi bi-newspaper"></i> Actualités
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/admin/partenaires">
-                                <i class="bi bi-people"></i> Partenaires
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/admin/logout">
-                                <i class="bi bi-box-arrow-right"></i> Déconnexion
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+<?php
+$pageTitle = ($isEdit ? 'Modifier' : 'Ajouter') . ' un bien';
+$activeNav = 'biens';
+ob_start();
+?>
+<script>
+(function () {
+    'use strict';
+    document.querySelectorAll('.needs-validation').forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+})();
 
-            <!-- Main content -->
-            <div class="col-md-9 col-lg-10 main-content">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2><?php echo $isEdit ? 'Modifier' : 'Ajouter'; ?> un bien</h2>
-                    <a href="/admin/biens" class="btn btn-secondary">
-                        <i class="bi bi-arrow-left"></i> Retour à la liste
-                    </a>
-                </div>
+function deleteImage(bienId, imageId) {
+    if (!confirm('Supprimer cette image ?')) return;
+    fetch(`/admin/biens/${bienId}/image/${imageId}/delete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': window.CSPI10.csrfToken }
+    })
+    .then(r => r.json())
+    .then(data => { if (data.success) location.reload(); else alert(data.message || 'Erreur'); })
+    .catch(() => alert('Erreur réseau'));
+}
 
-                <?php if ($error): ?>
-                    <div class="alert alert-danger">
-                        <?php echo htmlspecialchars($error); ?>
-                    </div>
-                <?php endif; ?>
+function setPrimaryImage(bienId, imageId) {
+    fetch(`/admin/biens/${bienId}/image/${imageId}/primary`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': window.CSPI10.csrfToken }
+    })
+    .then(r => r.json())
+    .then(data => { if (data.success) location.reload(); else alert(data.message || 'Erreur'); })
+    .catch(() => alert('Erreur réseau'));
+}
+</script>
+<?php
+$extraScripts = ob_get_clean();
+require __DIR__ . '/../include/layout_start.php';
+?>
 
-                <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+<div class="admin-toolbar">
+    <a href="<?= url('/admin/biens') ?>" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Retour à la liste
+    </a>
+</div>
+
+<?php if ($error): ?>
+    <div class="alert alert-danger"><?= e($error) ?></div>
+<?php endif; ?>
+
+<form method="POST" enctype="multipart/form-data" class="needs-validation card card-body" novalidate>
+    <?= \App\Core\Security::csrfField() ?>
                     <!-- Informations publiques -->
                     <div class="form-section">
                         <h4>Informations publiques</h4>
@@ -277,7 +206,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <?php foreach ($images as $image): ?>
                                             <div class="col-md-4 mb-3">
                                                                                         <div class="image-container">
-                                            <img src="<?php echo htmlspecialchars($image['url']); ?>" 
+                                            <img src="<?= mediaUrl(ltrim($image['url'], '/')) ?>"
                                                  class="img-thumbnail" 
                                                  alt="Image du bien">
                                             <div class="image-actions">
@@ -339,78 +268,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                     </div>
 
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <button type="submit" class="btn btn-primary">
-                            <?php echo $isEdit ? 'Mettre à jour' : 'Ajouter'; ?> le bien
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save"></i> <?= $isEdit ? 'Mettre à jour' : 'Ajouter' ?> le bien
+        </button>
     </div>
+</form>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-    // Validation du formulaire
-    (function () {
-        'use strict'
-        var forms = document.querySelectorAll('.needs-validation')
-        Array.prototype.slice.call(forms).forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
-                }
-                form.classList.add('was-validated')
-            }, false)
-        })
-    })()
-
-    // Gestion de la suppression des images
-    function deleteImage(bienId, imageId) {
-        if (confirm('Êtes-vous sûr de vouloir supprimer cette image ?')) {
-            fetch(`/admin/biens/${bienId}/image/${imageId}/delete`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload();
-                } else {
-                    alert(data.error || 'Une erreur est survenue');
-                }
-            })
-            .catch(error => {
-                console.error('Erreur:', error);
-                alert('Une erreur est survenue');
-            });
-        }
-    }
-
-    function setPrimaryImage(bienId, imageId) {
-        fetch(`/admin/biens/${bienId}/image/${imageId}/primary`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert(data.error || 'Une erreur est survenue');
-            }
-        })
-        .catch(error => {
-            console.error('Erreur:', error);
-            alert('Une erreur est survenue');
-        });
-    }
-    </script>
-</body>
-</html> 
+<?php require __DIR__ . '/../include/layout_end.php'; ?>
