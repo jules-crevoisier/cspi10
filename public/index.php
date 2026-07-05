@@ -101,6 +101,10 @@ switch ($uri) {
         break;
 
     // Administration
+    case '/admin':
+        header('Location: /admin/login', true, 302);
+        exit;
+
     case '/admin/login':
         require ADMIN_PATH . 'login.php';
         break;

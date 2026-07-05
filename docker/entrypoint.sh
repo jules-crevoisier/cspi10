@@ -10,16 +10,8 @@ fi
 
 mkdir -p database/data public/uploads/biens public/uploads/actualites public/uploads/partenaires
 
-# Données versionnées dans Git → copiées dans le volume au 1er démarrage (volume Docker vide)
-if [ -f .image-data/cspi.db ] && [ ! -s database/data/cspi.db ]; then
-    cp .image-data/cspi.db database/data/cspi.db
-    echo "[entrypoint] Base SQLite initialisée depuis l'image (.image-data/cspi.db)."
-fi
-
-if [ -d .image-data/uploads ] && [ -z "$(ls -A public/uploads 2>/dev/null)" ]; then
-    cp -a .image-data/uploads/. public/uploads/
-    echo "[entrypoint] Uploads initialisés depuis l'image (.image-data/uploads)."
-fi
+# Données Git → volumes (1er démarrage ou volume vide / sans contenu)
+docker/seed-volumes.sh
 
 php scripts/migrate.php
 

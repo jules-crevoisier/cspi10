@@ -53,7 +53,7 @@ COPY public/uploads/ .image-data/uploads/
 
 RUN mkdir -p database/data public/uploads/biens public/uploads/actualites public/uploads/partenaires \
     && chown -R www-data:www-data database/data public/uploads \
-    && chmod +x docker/entrypoint.sh docker/healthcheck.sh
+    && chmod +x docker/entrypoint.sh docker/healthcheck.sh docker/seed-volumes.sh
 
 COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
 COPY docker/apache-security.conf /etc/apache2/conf-available/security-custom.conf

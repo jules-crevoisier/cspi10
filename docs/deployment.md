@@ -28,7 +28,8 @@ Guide pas à pas pour déployer le site CSPI10 sur [Dockploy](https://dockploy.c
 
 > **Données dans Git** : `database/data/cspi.db` et `public/uploads/` sont versionnés dans le dépôt.
 > Au **premier** démarrage (volume vide), l'entrypoint copie automatiquement ces fichiers depuis l'image Docker.
-> Les déploiements suivants **conservent** le volume — les changements faits en prod ne sont pas écrasés par Git.
+> Si le volume existe mais **sans fichiers uploads** ou **sans actualités en base**, les données Git sont réinjectées automatiquement.
+> Les déploiements suivants **conservent** le volume dès qu'il contient du contenu — les changements faits en prod ne sont pas écrasés par Git.
 > Pour réinitialiser depuis Git : supprimez les volumes Dockploy puis redéployez.
 
 ## 4. Variables d'environnement
